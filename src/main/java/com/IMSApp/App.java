@@ -9,8 +9,9 @@ import java.sql.Connection;
 public class App 
 {
     public static void main( String[] args ) throws java.sql.SQLException {
-        Connection maindb = null;
-        maindb = DBHandler.connect();
+        // connect to database
+        Connection maindb;
+        maindb = DBHandler.tempConnect();
         System.out.println(maindb.getMetaData());
     }
 }

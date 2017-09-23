@@ -5,8 +5,8 @@ import java.sql.*;
 public class DBHandler {
     public static String DBloc = "jdbc:hsqldb:file:maindb";
 
-    public static void main(String[] args) {
-    }
+    //public static void main(String[] args) {}
+
     public static void pullData(){
         ResultSet rs = null;
     }
@@ -23,8 +23,7 @@ public class DBHandler {
         Connection maindbCon = null;
         try {
             maindbCon = DriverManager.getConnection(DBloc);
-            System.out.println("database connected");
-            System.out.println(maindbCon.getMetaData());
+            System.out.println("database file connected");
         } catch (java.sql.SQLException e) {
             System.out.println("error initializing database");
             e.printStackTrace();
@@ -34,11 +33,32 @@ public class DBHandler {
 
     public static void destroy(Connection c){
         try {
-            PreparedStatement psmt = c.prepareStatement("DROP SCHEMA PUBLIC CASCADE");
-            psmt.executeQuery();
+            PreparedStatement psmt = c.prepareStatement("DROP SCHEMA");
+            psmt.execute();
             System.out.println("database destroyed");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void addRec(){
+        // TODO
+    }
+
+    public static void viewRec(){
+        //TODO
+    }
+
+    public static Connection tempConnect(){
+        Connection maindbCon = null;
+        try {
+            maindbCon = DriverManager.getConnection("jdbc:hsqldb:mem:maindb");
+            System.out.println("database memory connection");
+            System.out.println(maindbCon.getMetaData());
+        } catch (java.sql.SQLException e) {
+            System.out.println("error initializing database");
+            e.printStackTrace();
+        }
+        return maindbCon;
     }
 }

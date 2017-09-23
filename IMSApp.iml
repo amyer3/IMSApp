@@ -10,9 +10,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: junit:junit:3.8.1" level="project" />
-    <orderEntry type="library" name="Maven: org.hsqldb:hsqldb:2.4.0" level="project" />
-    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.7-dmr" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.derby:derby:10.13.1.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: junit:junit:3.8.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.hsqldb:hsqldb:2.4.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: mysql:mysql-connector-java:8.0.7-dmr" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.apache.derby:derby:10.13.1.1" level="project" />
   </component>
 </module>
