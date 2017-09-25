@@ -1,4 +1,4 @@
-package com.IMSApp;/**
+package IMSApp;/**
  * Created by Alex on 9/22/17.
  */
 
