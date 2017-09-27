@@ -9,20 +9,23 @@ public class Operations {
         firstRun();
 
     }
-    public static void firstRun(Connection c) throws java.io.IOException {
+    public static Connection firstRun() throws java.io.IOException {
         File statusFile = new File("src/main/statusFileFolder/statusFile.txt"); //TODO location
         boolean firstRun = false;
         if(!statusFile.exists()){
             firstRun = true;
             statusFile.createNewFile();
-            System.out.println("file created");
+            System.out.println("file created"); //TODO delete
         }
         if(firstRun){
-            System.out.println("first run");
-            DBHandler.createFullDB(c);
+            System.out.println("first run"); //TODO delete
+            Connection NewConn = DBHandler.connect();
+            DBHandler.createFullDB(NewConn);
+            return NewConn;
         }
         else {
-            System.out.println("not first");
+            System.out.println("not first"); //TODO delete
+            return DBHandler.connect();
         }
     }
 
