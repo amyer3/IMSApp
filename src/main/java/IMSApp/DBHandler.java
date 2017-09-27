@@ -72,4 +72,8 @@ public class DBHandler {
         }
         return maindbCon;
     }
+
+    public static void createFullDB(Connection c){
+
+    }
 }
