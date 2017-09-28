@@ -40,7 +40,7 @@ public class DBHandler {
     public static void addRec(Connection c) throws java.sql.SQLException {
         Statement stmt = c.createStatement();
         ResultSet rs = stmt.executeQuery("INSERT INTO inv (row1, row2) VALUES ('a', 'b')");
-    }
+    } //TODO initial adding
 
     public static void viewRec(Connection c) throws java.sql.SQLException{
         String sql = "SELECT row1, row2 FROM inv";
@@ -54,7 +54,11 @@ public class DBHandler {
         }
         rs2.close();
         System.out.println(ai + " " + b);
-    }
+    } //TODO prints reports
+
+    public static void deleteRec(Connection c) throws java.sql.SQLException{} //TODO delete a recors
+
+    public static void updateRec(Connection c) throws java.sql.SQLException{} //TODO updates for sold
 
     public static Connection tempConnect(){
         Connection maindbCon = null;
@@ -66,7 +70,7 @@ public class DBHandler {
             System.out.println("Table Created");
 
             System.out.println(maindbCon.getMetaData());
-        } catch (java.sql.SQLException e) {
+        } catch (SQLException e) {
             System.out.println("error initializing database");
             e.printStackTrace();
         }
@@ -74,6 +78,15 @@ public class DBHandler {
     }
 
     public static void createFullDB(Connection c){
+        try {
+            Statement stmt = c.createStatement();
+            stmt.executeUpdate("CREATE TABLE inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
+                    "Date_Made DATE, Sold boolean, Sale_Date DATE)");
+            System.out.println("Table Created");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
