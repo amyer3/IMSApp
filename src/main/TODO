@@ -4,5 +4,6 @@ TODO:
     full GUI
     add/update/delete record build out
     shutdown & save process
+    print records
 
 ADDING HAS TO ALL BE .tostring
