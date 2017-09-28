@@ -1,12 +1,14 @@
 package IMSApp;
 import java.io.*;
-import java.sql.Connection;
+import java.sql.*;
 
 
 public class Operations {
 
-    public static void main(String[] args) throws java.io.IOException{
+    public static void main(String[] args) throws java.io.IOException, java.sql.SQLException{
         Connection c = firstRun();
+        Statement stmt = c.createStatement();
+
 
     }
     public static Connection firstRun() throws java.io.IOException {

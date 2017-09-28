@@ -37,9 +37,11 @@ public class DBHandler {
         }
     }
 
-    public static void addRec(Connection c) throws java.sql.SQLException {
+    public static void addRec(Connection c, String[] items) throws java.sql.SQLException {
         Statement stmt = c.createStatement();
-        ResultSet rs = stmt.executeQuery("INSERT INTO inv (row1, row2) VALUES ('a', 'b')");
+        ResultSet rs = stmt.executeQuery("INSERT INTO inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
+                "Date_Made DATE, Sold boolean, Sale_Date DATE) VALUES " +
+                "("+items[0]+items[1]+items[2]+items[3]+items[4]+items[5]+")");
     } //TODO initial adding
 
     public static void viewRec(Connection c) throws java.sql.SQLException{
