@@ -1,11 +1,16 @@
 package IMSApp;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.Connection;
 
 public class GUI extends Application {
 
@@ -14,40 +19,32 @@ public class GUI extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws java.sql.SQLException, IOException {
         primaryStage.setTitle("Inventory Management System");
-        GridPane gp = new GridPane();
-        gp.setAlignment(Pos.CENTER);
-        gp.setHgap(10);
-        gp.setVgap(10);
+        Parent root = FXMLLoader.load(getClass().getResource("src/main/fxml/splash.fxml"));
 
         Button iMadeSomething = new Button();
         iMadeSomething.setText("I Made Something");
+        iMadeSomething.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent e){
+                Stage stage = new Stage();
+                stage.show();
+            }
+        } );
 
-        Button iSoldSomething = new Button();
-        iSoldSomething.setText("I Sold Something");
-
-        Button viewRecords = new Button();
-        viewRecords.setText("View/Print Records");
-
-        Button updaterecords = new Button();
-        updaterecords.setText("Update a record");
-
-        gp.add(iMadeSomething, 0, 0);
-        gp.add(iSoldSomething, 1, 0);
-        gp.add(viewRecords, 2, 0);
-        gp.add(updaterecords, 3, 0);
-
-        Scene scene = new Scene(gp, 400, 400);
+        Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public Scene creation(){return null;}
+    public void creation(){
+        Stage stage = new Stage();
+        stage.show();
+    }
 
-    public Scene sales(){return null;}
+    private void sales(Connection c){Stage stage = new Stage();}
 
-    public Scene update(){return null;}
+    private void update(Connection c){Stage stage = new Stage();}
 
-    public Scene records(){return null;}
+    private void records(Connection c){Stage stage = new Stage();}
 }
