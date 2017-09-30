@@ -37,47 +37,7 @@ public class DBHandler {
         }
     }
 
-    public static void addRec(Connection c, String[] items) throws java.sql.SQLException {
-        Statement stmt = c.createStatement();
-        ResultSet rs = stmt.executeQuery("INSERT INTO inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
-                "Date_Made DATE, Sold boolean, Sale_Date DATE) VALUES " +
-                "("+items[0]+items[1]+items[2]+items[3]+items[4]+items[5]+")");
-    } //TODO initial adding
-
-    public static void viewRec(Connection c) throws java.sql.SQLException{
-        String sql = "SELECT row1, row2 FROM inv";
-        Statement stmt = c.createStatement();
-        ResultSet rs2 = stmt.executeQuery(sql);
-        String b = null;
-        String ai = null;
-        while (rs2.next()) {
-            ai = rs2.getString("row1");
-            b = rs2.getString("row2");
-        }
-        rs2.close();
-        System.out.println(ai + " " + b);
-    } //TODO prints reports
-
-    public static void deleteRec(Connection c) throws java.sql.SQLException{} //TODO delete a recors
-
-    public static void updateRec(Connection c) throws java.sql.SQLException{} //TODO updates for sold
-
-    public static Connection tempConnect(){
-        Connection maindbCon = null;
-        try {
-            maindbCon = DriverManager.getConnection("jdbc:hsqldb:mem:maindb");
-            System.out.println("database memory connection");
-            Statement stmt = maindbCon.createStatement();
-            stmt.executeUpdate("CREATE TABLE inv (row1 varchar(225), row2 varchar(225))");
-            System.out.println("Table Created");
-
-            System.out.println(maindbCon.getMetaData());
-        } catch (SQLException e) {
-            System.out.println("error initializing database");
-            e.printStackTrace();
-        }
-        return maindbCon;
-    }
+    public static void deleteRec(Connection c, String id) throws java.sql.SQLException{} //TODO delete a record
 
     public static void createFullDB(Connection c){
         try {

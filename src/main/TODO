@@ -7,3 +7,13 @@ TODO:
     print records
 
 ADDING HAS TO ALL BE .tostring
+
+
+Button iMadeSomething = new Button();
+        iMadeSomething.setText("I Made Something");
+        iMadeSomething.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent e){
+                Stage stage = new Stage();
+                stage.show();
+            }
+        } );
