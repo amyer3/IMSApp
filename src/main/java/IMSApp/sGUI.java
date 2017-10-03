@@ -28,7 +28,7 @@ public class sGUI {
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
 
         JButton madeButton = new JButton("I made something");
-        madeButton.setActionCommand("made");
+        madeButton.setActionCommand("add");
         madeButton.addActionListener(new ButtonClickListener());
 
         JButton soldButton = new JButton("I sold something");
@@ -70,7 +70,7 @@ public class sGUI {
 
         superPanel.add(home, "home");
         superPanel.add(addCard, "add");
-        superPanel.add(salesCard, "sales");
+        superPanel.add(salesCard, "sold");
         superPanel.add(updateCard, "update");
         superPanel.add(viewCard, "view");
         superPanel.add(exportCard, "export");
@@ -83,45 +83,8 @@ public class sGUI {
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
             CardLayout c1 = (CardLayout) superPanel.getLayout();
-            String command = e.getActionCommand();
-            if(command.equals( "made")){
-                c1.show(superPanel, "add");
-            } else if(command.equals("sold")){
-                saleRecord();
-            } else if(command.equals( "view")){
-                seeRecord();
-            } else if(command.equals("update")) {
-                updateRecord();
-            } else if(command.equals("export")){
-                exportRecord();
-            } else if(command.equals("back")){
-                goBack();
-            }else {
-                outputText.setText("unknown command");
-            }
-        }
-        private void saleRecord() {
-            outputText.setText("sold");
-        } //TODO updates for sold
-
-        private void updateRecord() {
-            outputText.setText("update");
+            c1.show(superPanel, e.getActionCommand());
         }
 
-        private void newRecord() {
-            outputText.setText("new");
-        } //TODO initial adding
-
-        private void seeRecord(){
-            outputText.setText("seen");
-        } //TODO prints reports
-
-        private void exportRecord(){
-            outputText.setText("export");
-        }
-
-        private void goBack(){
-            outputText.setText("back");
-        }
     }
 }
