@@ -18,13 +18,37 @@ public class sGUI {
 
     public void doGui(){
         cards = new JFrame();
-        Container panel = new Container();
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JPanel home = new JPanel();
         superPanel = new JPanel(new CardLayout());
 
         cards.setSize(400, 600);
 
+        JPanel addCard = new JPanel();
+        JTextField idField = new JTextField();
+        addCard.add(idField);
+        JPanel salesCard = new JPanel();
+        JPanel updateCard = new JPanel();
+        JPanel viewCard = new JPanel();
+        JPanel exportCard = new JPanel();
+
+        cards.setLayout(cardPattern);
+        cards.setSize(800, 500);
+
+
+        superPanel.add(home(), "home");
+        superPanel.add(addCard, "add");
+        superPanel.add(salesCard, "sold");
+        superPanel.add(updateCard, "update");
+        superPanel.add(viewCard, "view");
+        superPanel.add(exportCard, "export");
+
+        cards.add(superPanel, BorderLayout.CENTER);
+        cards.pack();
+        cards.setVisible(true);
+
+    }
+    public JPanel home(){
+        JPanel home = new JPanel();
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
 
         JButton madeButton = new JButton("I made something");
@@ -49,16 +73,7 @@ public class sGUI {
 
         outputText = new JLabel("", SwingConstants.CENTER);
 
-        JPanel addCard = new JPanel();
-        JTextField idField = new JTextField();
-        addCard.add(idField);
-        JPanel salesCard = new JPanel();
-        JPanel updateCard = new JPanel();
-        JPanel viewCard = new JPanel();
-        JPanel exportCard = new JPanel();
 
-        cards.setLayout(cardPattern);
-        cards.setSize(800, 500);
         home.setLayout(layout);
         home.add(tLabel);
         home.add(madeButton);
@@ -67,19 +82,14 @@ public class sGUI {
         home.add(updateButton);
         home.add(exportButton);
         home.add(outputText);
-
-        superPanel.add(home, "home");
-        superPanel.add(addCard, "add");
-        superPanel.add(salesCard, "sold");
-        superPanel.add(updateCard, "update");
-        superPanel.add(viewCard, "view");
-        superPanel.add(exportCard, "export");
-
-        cards.add(superPanel, BorderLayout.CENTER);
-        cards.pack();
-        cards.setVisible(true);
-
+        return home;
     }
+    public JPanel addCard(){return null;}
+    public JPanel salesCard(){return null;}
+    public JPanel updateCard(){return null;}
+    public JPanel viewCard(){return null;}
+    public JPanel exportCard(){return null;}
+
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
             CardLayout c1 = (CardLayout) superPanel.getLayout();
