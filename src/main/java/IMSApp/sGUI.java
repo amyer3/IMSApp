@@ -23,9 +23,7 @@ public class sGUI {
 
         cards.setSize(400, 600);
 
-        JPanel addCard = new JPanel();
-        JTextField idField = new JTextField();
-        addCard.add(idField);
+
         JPanel salesCard = new JPanel();
         JPanel updateCard = new JPanel();
         JPanel viewCard = new JPanel();
@@ -36,7 +34,7 @@ public class sGUI {
 
 
         superPanel.add(home(), "home");
-        superPanel.add(addCard, "add");
+        superPanel.add(addCard(), "add");
         superPanel.add(salesCard, "sold");
         superPanel.add(updateCard, "update");
         superPanel.add(viewCard, "view");
@@ -84,7 +82,35 @@ public class sGUI {
         home.add(outputText);
         return home;
     }
-    public JPanel addCard(){return null;}
+    private JPanel addCard(){
+        JPanel addCard = new JPanel();
+        addCard.setBorder(BorderFactory.createEtchedBorder());
+        GridLayout addLayout = new GridLayout(2, 4);
+
+        JLabel id = new JLabel("Product ID");
+        JLabel desc = new JLabel("Description");
+        JLabel cogs = new JLabel("COGS");
+        JLabel DateMade = new JLabel("Date Made");
+
+        JTextField idText = new JTextField("ProductID", 1);
+        JTextField descText = new JTextField(1);
+        JTextField cogsText = new JTextField(1);
+        JTextField DateMadeText = new JTextField("Date Made", 1);
+
+        addCard.add(id);
+        addCard.add(desc);
+        addCard.add(cogs);
+        addCard.add(DateMade);
+
+        addCard.add(idText);
+        addCard.add(descText);
+        addCard.add(cogsText);
+        addCard.add(DateMadeText);
+
+        addCard.setLayout(addLayout);
+
+        return addCard;
+    }
     public JPanel salesCard(){return null;}
     public JPanel updateCard(){return null;}
     public JPanel viewCard(){return null;}
