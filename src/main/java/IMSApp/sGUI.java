@@ -1,14 +1,11 @@
 package IMSApp;
 
-import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class sGUI {
     JLabel outputText;
@@ -17,10 +14,7 @@ public class sGUI {
     GridLayout layout = new GridLayout(0,1);
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
-    Connection databaseConnection = Operations.firstRun();
-
-    public sGUI() throws IOException, SQLException {
-    }
+    //Connection databaseConnection = Operations.firstRun();
 
     public static void main(String[] args) {
     }
@@ -100,7 +94,7 @@ public class sGUI {
         final JTextField idText = new JTextField("ProductID", 1);
         final JTextField descText = new JTextField(1);
         final JTextField cogsText = new JTextField(1);
-        final JCalendar DateMadeText = new JCalendar();
+        final JDateChooser DateMadeText = new JDateChooser();
         String[] values = null;
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -115,21 +109,29 @@ public class sGUI {
                     values[1] = descText.getText();
                     values[2] = cogsText.getText();
                     values[3] = DateMadeText.getDate().toString();
-                    DBHandler.addRec(databaseConnection,values);
+                    //if(Operations.blankChecker(values)){
+                        //DBHandler.addRec(databaseConnection,values);
+                    //} else {
+                       // throw new NullPointerException();
+                   // }
 
-                }catch (Exception ex){
+
+                }catch (NullPointerException ex){
                     outputText.setText("All fields are required");
+                    ex.printStackTrace();
                 }
                 finally {
                     idText.setText("");
                     descText.setText("");
                     cogsText.setText("");
+                    DateMadeText.setDate(null);
                 }
 
             }
         });
 
         outputText = new JLabel();
+        outputText.setSize(2, 1);
 
         addCard.add(id);
         addCard.add(desc);
@@ -146,7 +148,6 @@ public class sGUI {
         addCard.add(outputText);
 
         addCard.setLayout(addLayout);
-
         return addCard;
     }
     private JPanel salesCard(){

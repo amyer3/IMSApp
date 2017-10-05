@@ -41,8 +41,13 @@ public class DBHandler {
     public static void createFullDB(Connection c){
         try {
             Statement stmt = c.createStatement();
-            stmt.executeUpdate("CREATE TABLE inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
-                    "Date_Made DATE, Sold boolean, Sale_Date DATE)");
+            stmt.executeUpdate("CREATE TABLE inventory " +
+                    "(ID varchar(255) NOT NULL," +
+                    "Desc varchar(255)," +
+                    "COGS float, " +
+                    "Date_Made DATE, " +
+                    "Sold boolean, " +
+                    "Sale_Date DATE)");
             System.out.println("Table Created");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,7 +59,7 @@ public class DBHandler {
         ResultSet rs = stmt.executeQuery("INSERT INTO inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
                 "Date_Made DATE, Sold boolean) VALUES " +
                 "("+items[0]+items[1]+items[2]+items[3]+"false)");
-    } //TODO initial adding
+    } //TODO unexpected token VARCHAR
 
     public static void viewRec(Connection c, String id) throws java.sql.SQLException{
         String sql = "SELECT row1, row2 FROM inv";
