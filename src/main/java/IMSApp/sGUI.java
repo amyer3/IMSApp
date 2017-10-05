@@ -82,23 +82,29 @@ public class sGUI {
         return home;
     }
     private JPanel addCard(){
-        JPanel addCard = new JPanel();
+        JPanel superPanel = new JPanel();
+        superPanel.setLayout(new BorderLayout());
+        JPanel buttons = new JPanel();
+        JPanel status = new JPanel();
+        JPanel addCard = new JPanel(); // TODO Box or Spring Layout
         addCard.setBorder(BorderFactory.createEtchedBorder());
-        GridLayout addLayout = new GridLayout(3, 4);
+        buttons.setBorder(BorderFactory.createEtchedBorder());
+        GridLayout addLayout = new GridLayout(2, 4);
 
-        JLabel id = new JLabel("Product ID");
-        JLabel desc = new JLabel("Description");
-        JLabel cogs = new JLabel("COGS");
-        JLabel DateMade = new JLabel("Date Made");
+        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
+        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
 
-        final JTextField idText = new JTextField("ProductID", 1);
+        final JTextField idText = new JTextField(1);
         final JTextField descText = new JTextField(1);
         final JTextField cogsText = new JTextField(1);
         final JDateChooser DateMadeText = new JDateChooser();
-        String[] values = null;
+
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
+
         JButton addButton = new JButton("Submit and Save");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -130,7 +136,7 @@ public class sGUI {
             }
         });
 
-        outputText = new JLabel();
+        outputText = new JLabel("", SwingConstants.CENTER);
         outputText.setSize(2, 1);
 
         addCard.add(id);
@@ -143,25 +149,56 @@ public class sGUI {
         addCard.add(cogsText);
         addCard.add(DateMadeText);
 
-        addCard.add(back);
-        addCard.add(addButton);
-        addCard.add(outputText);
+        buttons.add(back);
+        buttons.add(addButton);
+        status.add(outputText);
 
         addCard.setLayout(addLayout);
-        return addCard;
+
+        superPanel.add(addCard, BorderLayout.NORTH);
+        superPanel.add(buttons, BorderLayout.CENTER);
+        superPanel.add(status, BorderLayout.PAGE_END);
+        return superPanel;
     }
     private JPanel salesCard(){
+        JPanel superPanel = new JPanel();
+        superPanel.setLayout(new BorderLayout());
         JPanel salesCard = new JPanel();
+        salesCard.setLayout(new GridLayout(2,3));// TODO Box or Spring Layout
+        JPanel buttons = new JPanel();
+
         JLabel id = new JLabel("Product Id");
         JLabel saleDate = new JLabel("Date of Sale");
         JLabel salePrice = new JLabel("Sale Price");
 
         JTextField idText = new JTextField(1);
-        JTextField saleDateText = new JTextField(1);
+        JDateChooser saleDateText = new JDateChooser();
         JTextField salePriceText = new JTextField(1);
 
+        JButton save = new JButton("Submit and Save");
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
-        return salesCard;}
+            }
+        }); //Todo fill out action
+        back = new JButton("Back");
+        back.setActionCommand("home");
+        back.addActionListener(new ButtonClickListener());
+        outputText = new JLabel();
+
+        buttons.add(back);
+        buttons.add(save);
+        salesCard.add(id);
+        salesCard.add(saleDate);
+        salesCard.add(salePrice);
+        salesCard.add(idText);
+        salesCard.add(saleDateText);
+        salesCard.add(salePriceText);
+
+        superPanel.add(salesCard, BorderLayout.NORTH);
+        superPanel.add(buttons, BorderLayout.SOUTH);
+        return superPanel;
+    }
     private JPanel updateCard(){return null;}
     private JPanel viewCard(){return null;}
     private JPanel exportCard(){return null;}
