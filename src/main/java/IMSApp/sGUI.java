@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class sGUI {
     JLabel outputText;
@@ -14,6 +17,10 @@ public class sGUI {
     GridLayout layout = new GridLayout(0,1);
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
+    Connection databaseConnection = Operations.firstRun();
+
+    public sGUI() throws IOException, SQLException {
+    }
 
     public static void main(String[] args) {
     }
@@ -43,7 +50,7 @@ public class sGUI {
         cards.setVisible(true);
 
     }
-    private JPanel home(){
+    public JPanel home(){
         JPanel home = new JPanel();
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
 
@@ -108,16 +115,20 @@ public class sGUI {
                     values[1] = descText.getText();
                     values[2] = cogsText.getText();
                     values[3] = DateMadeText.getDate().toString();
+                    DBHandler.addRec(databaseConnection,values);
 
                 }catch (Exception ex){
                     outputText.setText("All fields are required");
                 }
                 finally {
                     idText.setText("");
+                    descText.setText("");
+                    cogsText.setText("");
                 }
 
             }
         });
+
         outputText = new JLabel();
 
         addCard.add(id);
@@ -153,6 +164,7 @@ public class sGUI {
     private JPanel updateCard(){return null;}
     private JPanel viewCard(){return null;}
     private JPanel exportCard(){return null;}
+
 
 
     private class ButtonClickListener implements ActionListener {

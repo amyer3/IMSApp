@@ -19,7 +19,6 @@ public class DBHandler {
         Connection maindbCon = null;
         try {
             maindbCon = DriverManager.getConnection(DBloc);
-            System.out.println("database file connected");
         } catch (java.sql.SQLException e) {
             System.out.println("error initializing database");
             e.printStackTrace();
@@ -48,8 +47,6 @@ public class DBHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void addRec(Connection c, String[] items) throws java.sql.SQLException {
