@@ -1,5 +1,7 @@
 package IMSApp;
 
+import com.toedter.calendar.JCalendar;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,21 +23,17 @@ public class sGUI {
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
 
-        cards.setSize(400, 600);
-
-
         JPanel salesCard = new JPanel();
         JPanel updateCard = new JPanel();
         JPanel viewCard = new JPanel();
         JPanel exportCard = new JPanel();
 
         cards.setLayout(cardPattern);
-        cards.setSize(800, 500);
-
+        cards.setSize(500, 500);
 
         superPanel.add(home(), "home");
         superPanel.add(addCard(), "add");
-        superPanel.add(salesCard, "sold");
+        superPanel.add(salesCard(), "sold");
         superPanel.add(updateCard, "update");
         superPanel.add(viewCard, "view");
         superPanel.add(exportCard, "export");
@@ -45,7 +43,7 @@ public class sGUI {
         cards.setVisible(true);
 
     }
-    public JPanel home(){
+    private JPanel home(){
         JPanel home = new JPanel();
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
 
@@ -85,17 +83,42 @@ public class sGUI {
     private JPanel addCard(){
         JPanel addCard = new JPanel();
         addCard.setBorder(BorderFactory.createEtchedBorder());
-        GridLayout addLayout = new GridLayout(2, 4);
+        GridLayout addLayout = new GridLayout(3, 4);
 
         JLabel id = new JLabel("Product ID");
         JLabel desc = new JLabel("Description");
         JLabel cogs = new JLabel("COGS");
         JLabel DateMade = new JLabel("Date Made");
 
-        JTextField idText = new JTextField("ProductID", 1);
-        JTextField descText = new JTextField(1);
-        JTextField cogsText = new JTextField(1);
-        JTextField DateMadeText = new JTextField("Date Made", 1);
+        final JTextField idText = new JTextField("ProductID", 1);
+        final JTextField descText = new JTextField(1);
+        final JTextField cogsText = new JTextField(1);
+        final JCalendar DateMadeText = new JCalendar();
+        String[] values = null;
+        back = new JButton("Back");
+        back.setActionCommand("home");
+        back.addActionListener(new ButtonClickListener());
+        JButton addButton = new JButton("Submit and Save");
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    String[] values = new String[4];
+                    outputText.setText(DateMadeText.getDate().toString());
+                    values[0] = idText.getText();
+                    values[1] = descText.getText();
+                    values[2] = cogsText.getText();
+                    values[3] = DateMadeText.getDate().toString();
+
+                }catch (Exception ex){
+                    outputText.setText("All fields are required");
+                }
+                finally {
+                    idText.setText("");
+                }
+
+            }
+        });
+        outputText = new JLabel();
 
         addCard.add(id);
         addCard.add(desc);
@@ -107,14 +130,30 @@ public class sGUI {
         addCard.add(cogsText);
         addCard.add(DateMadeText);
 
+        addCard.add(back);
+        addCard.add(addButton);
+        addCard.add(outputText);
+
         addCard.setLayout(addLayout);
 
         return addCard;
     }
-    public JPanel salesCard(){return null;}
-    public JPanel updateCard(){return null;}
-    public JPanel viewCard(){return null;}
-    public JPanel exportCard(){return null;}
+    private JPanel salesCard(){
+        JPanel salesCard = new JPanel();
+        JLabel id = new JLabel("Product Id");
+        JLabel saleDate = new JLabel("Date of Sale");
+        JLabel salePrice = new JLabel("Sale Price");
+
+        JTextField idText = new JTextField(1);
+        JTextField saleDateText = new JTextField(1);
+        JTextField salePriceText = new JTextField(1);
+
+
+        return salesCard;}
+    private JPanel updateCard(){return null;}
+    private JPanel viewCard(){return null;}
+    private JPanel exportCard(){return null;}
+
 
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
@@ -123,4 +162,5 @@ public class sGUI {
         }
 
     }
+
 }

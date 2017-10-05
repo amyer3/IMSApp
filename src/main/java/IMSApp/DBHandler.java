@@ -55,8 +55,8 @@ public class DBHandler {
     public static void addRec(Connection c, String[] items) throws java.sql.SQLException {
         Statement stmt = c.createStatement();
         ResultSet rs = stmt.executeQuery("INSERT INTO inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
-                "Date_Made DATE, Sold boolean, Sale_Date DATE) VALUES " +
-                "("+items[0]+items[1]+items[2]+items[3]+items[4]+items[5]+")");
+                "Date_Made DATE, Sold boolean) VALUES " +
+                "("+items[0]+items[1]+items[2]+items[3]+"false)");
     } //TODO initial adding
 
     public static void viewRec(Connection c, String id) throws java.sql.SQLException{
