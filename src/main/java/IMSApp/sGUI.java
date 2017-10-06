@@ -15,6 +15,7 @@ public class sGUI {
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
     //Connection databaseConnection = Operations.firstRun();
+    // TODO uncomment for full functionality
 
     public static void main(String[] args) {
     }
@@ -24,9 +25,6 @@ public class sGUI {
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
 
-        JPanel salesCard = new JPanel();
-        JPanel updateCard = new JPanel();
-        JPanel viewCard = new JPanel();
         JPanel exportCard = new JPanel();
 
         cards.setLayout(cardPattern);
@@ -36,7 +34,7 @@ public class sGUI {
         superPanel.add(addCard(), "add");
         superPanel.add(salesCard(), "sold");
         superPanel.add(updateCard(), "update");
-        superPanel.add(viewCard, "view");
+        superPanel.add(viewCard(), "view");
         superPanel.add(exportCard, "export");
 
         cards.add(superPanel, BorderLayout.CENTER);
@@ -88,15 +86,16 @@ public class sGUI {
         superPanel.setLayout(new BorderLayout());
         JPanel buttons = new JPanel();
         JPanel status = new JPanel();
-        JPanel addCard = new JPanel(); // TODO Box or Spring Layout
+        final JPanel addCard = new JPanel(); // TODO Box or Spring Layout
         addCard.setBorder(BorderFactory.createEtchedBorder());
         buttons.setBorder(BorderFactory.createEtchedBorder());
-        GridLayout addLayout = new GridLayout(2, 4);
+        final GridLayout addLayout = new GridLayout(2, 5);
 
         JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
         JLabel desc = new JLabel("Description", SwingConstants.CENTER);
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
         JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
+        outputText = new JLabel(" ", SwingConstants.CENTER);
 
         final JTextField idText = new JTextField(1);
         final JTextField descText = new JTextField(1);
@@ -122,6 +121,7 @@ public class sGUI {
                     //} else {
                        // throw new NullPointerException();
                    // }
+                    //TODO uncomment for full functionality
 
 
                 }catch (NullPointerException ex){
@@ -137,9 +137,6 @@ public class sGUI {
 
             }
         });
-
-        outputText = new JLabel("", SwingConstants.CENTER);
-        outputText.setSize(2, 1);
 
         addCard.add(id);
         addCard.add(desc);
@@ -159,7 +156,7 @@ public class sGUI {
 
         superPanel.add(addCard, BorderLayout.NORTH);
         superPanel.add(buttons, BorderLayout.CENTER);
-        superPanel.add(status, BorderLayout.PAGE_END);
+        superPanel.add(status, BorderLayout.AFTER_LAST_LINE);
         return superPanel;
     }
     private JPanel salesCard(){
@@ -202,9 +199,9 @@ public class sGUI {
         return superPanel;
     }
     private JPanel updateCard(){
-        JPanel superPanel = new JPanel();
+        final JPanel superPanel = new JPanel();
         superPanel.setLayout(new BorderLayout());
-        JPanel updateCard = new JPanel();
+        final JPanel updateCard = new JPanel();
         updateCard.setLayout(new GridLayout(2, 6)); // TODO spring layout
         JPanel buttons = new JPanel();
 
@@ -214,12 +211,11 @@ public class sGUI {
         JButton submit = new JButton("Submit and Save");
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
             }
         }); // TODO fill out action listener
 
 
-        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel id = new JLabel("Product ID to be Updated", SwingConstants.CENTER);
         JLabel desc = new JLabel("Description", SwingConstants.CENTER);
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
         JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
@@ -254,7 +250,45 @@ public class sGUI {
         superPanel.add(buttons, BorderLayout.SOUTH);
         return superPanel;
     }
-    private JPanel viewCard(){return null;}
+    private JPanel viewCard(){
+        JPanel superPanel = new JPanel();
+        superPanel.setLayout(new BorderLayout());
+        JPanel query = new JPanel();
+        JPanel buttons = new JPanel();
+        JPanel results = new JPanel();
+
+        JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
+        JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel sold = new JLabel("Sold?", SwingConstants.CENTER);
+        JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
+        JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
+
+        back = new JButton("Back");
+        back.setActionCommand("home");
+        back.addActionListener(new ButtonClickListener());
+        JButton lookup = new JButton("Look up item");
+        lookup.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        JButton searchAgain = new JButton("New Search");
+        searchAgain.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
+
+        buttons.add(back);
+        buttons.add(lookup);
+        buttons.add(searchAgain);
+        superPanel.add(query, BorderLayout.NORTH);
+        superPanel.add(results, BorderLayout.CENTER);
+        superPanel.add(buttons, BorderLayout.SOUTH);
+        return superPanel;
+    }
     private JPanel exportCard(){return null;}
 
 
