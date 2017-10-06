@@ -89,13 +89,13 @@ public class sGUI {
         final JPanel addCard = new JPanel(); // TODO Box or Spring Layout
         addCard.setBorder(BorderFactory.createEtchedBorder());
         buttons.setBorder(BorderFactory.createEtchedBorder());
-        final GridLayout addLayout = new GridLayout(2, 5);
+        final GridLayout addLayout = new GridLayout(5, 2);
 
-        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
-        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
-        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
-        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
-        outputText = new JLabel(" ", SwingConstants.CENTER);
+        JLabel id = new JLabel("Product ID", SwingConstants.RIGHT);
+        JLabel desc = new JLabel("Description", SwingConstants.RIGHT);
+        JLabel cogs = new JLabel("COGS", SwingConstants.RIGHT);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.RIGHT);
+        outputText = new JLabel(" ", SwingConstants.RIGHT);
 
         final JTextField idText = new JTextField(1);
         final JTextField descText = new JTextField(1);
@@ -139,13 +139,12 @@ public class sGUI {
         });
 
         addCard.add(id);
-        addCard.add(desc);
-        addCard.add(cogs);
-        addCard.add(DateMade);
-
         addCard.add(idText);
+        addCard.add(desc);
         addCard.add(descText);
+        addCard.add(cogs);
         addCard.add(cogsText);
+        addCard.add(DateMade);
         addCard.add(DateMadeText);
 
         buttons.add(back);
@@ -254,24 +253,29 @@ public class sGUI {
         JPanel superPanel = new JPanel();
         superPanel.setLayout(new BorderLayout());
         JPanel query = new JPanel();
+        query.setLayout(new GridLayout(4, 2));
         JPanel buttons = new JPanel();
-        JPanel results = new JPanel();
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
+        JLabel sold = new JLabel("Show only sold items", SwingConstants.CENTER);
+        JTextField soldText = new JTextField();
         JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
-        JLabel sold = new JLabel("Sold?", SwingConstants.CENTER);
+        JTextField productIDText = new JTextField();
         JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
+        JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
+        JDateChooser toDateChoose = new JDateChooser();
 
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
-        JButton lookup = new JButton("Look up item");
-        lookup.addActionListener(new ActionListener() {
+        JButton PDF = new JButton("View as PDF");
+        PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
+        JButton excel = new JButton("View in Excel");
         JButton searchAgain = new JButton("New Search");
         searchAgain.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -279,13 +283,23 @@ public class sGUI {
             }
         });
 
-
-
         buttons.add(back);
-        buttons.add(lookup);
+        buttons.add(PDF);
+        buttons.add(excel);
         buttons.add(searchAgain);
+
+        query.add(sold);
+        query.add(soldText);
+        query.add(pID);
+        query.add(productIDText);
+        query.add(fromDate);
+        query.add(fromDateChoose);
+        query.add(toDate);
+        query.add(toDateChoose);
+
+
+        superPanel.add(instructions);
         superPanel.add(query, BorderLayout.NORTH);
-        superPanel.add(results, BorderLayout.CENTER);
         superPanel.add(buttons, BorderLayout.SOUTH);
         return superPanel;
     }
