@@ -35,7 +35,7 @@ public class sGUI {
         superPanel.add(home(), "home");
         superPanel.add(addCard(), "add");
         superPanel.add(salesCard(), "sold");
-        superPanel.add(updateCard, "update");
+        superPanel.add(updateCard(), "update");
         superPanel.add(viewCard, "view");
         superPanel.add(exportCard, "export");
 
@@ -44,7 +44,8 @@ public class sGUI {
         cards.setVisible(true);
 
     }
-    public JPanel home(){
+    private JPanel home(){
+        JPanel superPanel = new JPanel();
         JPanel home = new JPanel();
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
 
@@ -79,7 +80,8 @@ public class sGUI {
         home.add(updateButton);
         home.add(exportButton);
         home.add(outputText);
-        return home;
+        superPanel.add(home);
+        return superPanel;
     }
     private JPanel addCard(){
         JPanel superPanel = new JPanel();
@@ -167,9 +169,9 @@ public class sGUI {
         salesCard.setLayout(new GridLayout(2,3));// TODO Box or Spring Layout
         JPanel buttons = new JPanel();
 
-        JLabel id = new JLabel("Product Id");
-        JLabel saleDate = new JLabel("Date of Sale");
-        JLabel salePrice = new JLabel("Sale Price");
+        JLabel id = new JLabel("Product Id", SwingConstants.CENTER);
+        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
+        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
 
         JTextField idText = new JTextField(1);
         JDateChooser saleDateText = new JDateChooser();
@@ -199,7 +201,59 @@ public class sGUI {
         superPanel.add(buttons, BorderLayout.SOUTH);
         return superPanel;
     }
-    private JPanel updateCard(){return null;}
+    private JPanel updateCard(){
+        JPanel superPanel = new JPanel();
+        superPanel.setLayout(new BorderLayout());
+        JPanel updateCard = new JPanel();
+        updateCard.setLayout(new GridLayout(2, 6)); // TODO spring layout
+        JPanel buttons = new JPanel();
+
+        back = new JButton("Back");
+        back.setActionCommand("home");
+        back.addActionListener(new ButtonClickListener());
+        JButton submit = new JButton("Submit and Save");
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        }); // TODO fill out action listener
+
+
+        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
+        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
+        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
+        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
+
+        JTextField idText = new JTextField(1);
+        JTextField descText = new JTextField(1);
+        JTextField cogsText = new JTextField(1);
+        JDateChooser DateMadeText = new JDateChooser();
+        JDateChooser saleDateText = new JDateChooser();
+        JTextField salePriceText = new JTextField(1);
+
+        updateCard.add(id);
+        updateCard.add(desc);
+        updateCard.add(cogs);
+        updateCard.add(DateMade);
+        updateCard.add(saleDate);
+        updateCard.add(salePrice);
+        updateCard.add(idText);
+        updateCard.add(descText);
+        updateCard.add(cogsText);
+        updateCard.add(DateMadeText);
+        updateCard.add(saleDateText);
+        updateCard.add(salePriceText);
+
+        buttons.add(back);
+        buttons.add(submit);
+
+
+        superPanel.add(updateCard, BorderLayout.NORTH);
+        superPanel.add(buttons, BorderLayout.SOUTH);
+        return superPanel;
+    }
     private JPanel viewCard(){return null;}
     private JPanel exportCard(){return null;}
 
