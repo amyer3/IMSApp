@@ -63,10 +63,6 @@ public class sGUI {
         updateButton.setActionCommand("update");
         updateButton.addActionListener(new ButtonClickListener());
 
-        JButton exportButton = new JButton("Export to Excel");
-        exportButton.setActionCommand("export");
-        exportButton.addActionListener(new ButtonClickListener());
-
         outputText = new JLabel("", SwingConstants.CENTER);
 
 
@@ -76,7 +72,6 @@ public class sGUI {
         home.add(soldButton);
         home.add(viewButton);
         home.add(updateButton);
-        home.add(exportButton);
         home.add(outputText);
         superPanel.add(home);
         return superPanel;
@@ -255,29 +250,47 @@ public class sGUI {
         JPanel query = new JPanel();
         query.setLayout(new GridLayout(4, 2));
         JPanel buttons = new JPanel();
+        JPanel narrowing = new JPanel();
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
-        JLabel sold = new JLabel("Show only sold items", SwingConstants.CENTER);
-        JTextField soldText = new JTextField();
+        JLabel sold = new JLabel("Show sold items", SwingConstants.CENTER);
+        JCheckBox soldText = new JCheckBox();
         JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
         JTextField productIDText = new JTextField();
         JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
         JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
         JDateChooser toDateChoose = new JDateChooser();
+        JLabel unsold = new JLabel("Show unsold items");
+        JCheckBox unsoldCheck = new JCheckBox();
 
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
+
         JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
+
         JButton excel = new JButton("View in Excel");
+        excel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         JButton searchAgain = new JButton("New Search");
         searchAgain.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JButton exportAll = new JButton("Export ALL Records to Excel");
+        exportAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
@@ -287,9 +300,8 @@ public class sGUI {
         buttons.add(PDF);
         buttons.add(excel);
         buttons.add(searchAgain);
+        buttons.add(exportAll);
 
-        query.add(sold);
-        query.add(soldText);
         query.add(pID);
         query.add(productIDText);
         query.add(fromDate);
@@ -297,13 +309,17 @@ public class sGUI {
         query.add(toDate);
         query.add(toDateChoose);
 
+        narrowing.add(sold);
+        narrowing.add(soldText);
+        narrowing.add(unsold);
+        narrowing.add(unsoldCheck);
 
-        superPanel.add(instructions);
-        superPanel.add(query, BorderLayout.NORTH);
+        superPanel.add(instructions, BorderLayout.PAGE_START);
+        superPanel.add(narrowing, BorderLayout.NORTH);
+        superPanel.add(query, BorderLayout.CENTER);
         superPanel.add(buttons, BorderLayout.SOUTH);
         return superPanel;
     }
-    private JPanel exportCard(){return null;}
 
 
 

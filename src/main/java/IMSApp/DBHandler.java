@@ -26,16 +26,6 @@ public class DBHandler {
         return maindbCon;
     }
 
-    public static void destroy(Connection c){
-        try {
-            PreparedStatement psmt = c.prepareStatement("DROP SCHEMA");
-            psmt.execute();
-            System.out.println("database destroyed");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void deleteRec(Connection c, String id) throws java.sql.SQLException{} //TODO delete a record
 
     public static void createFullDB(Connection c){
@@ -61,22 +51,12 @@ public class DBHandler {
                 "("+items[0]+items[1]+items[2]+items[3]+"false)");
     } //TODO unexpected token VARCHAR
 
-    public static void viewRec(Connection c, String id) throws java.sql.SQLException{
-        String sql = "SELECT row1, row2 FROM inv";
-        Statement stmt = c.createStatement();
-        ResultSet rs2 = stmt.executeQuery(sql);
-        String b = null;
-        String ai = null;
-        while (rs2.next()) {
-            ai = rs2.getString("row1");
-            b = rs2.getString("row2");
-        }
-        rs2.close();
-        System.out.println(ai + " " + b);
-    } //TODO prints reports
-
     public void soldRec(Connection c, String[] items) {} //TODO updates for sold
 
     public void update(Connection c, String[] items) {
     }
+
+    public void searchDates(Connection c){}
+
+    public void searchID(Connection c){}
 }
