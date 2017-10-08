@@ -11,7 +11,6 @@ public class sGUI {
     JLabel outputText;
     JFrame cards;
     JButton back;
-    GridLayout layout = new GridLayout(0,1);
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
     //Connection databaseConnection = Operations.firstRun();
@@ -32,7 +31,7 @@ public class sGUI {
         superPanel.add(home(), "home");
         superPanel.add(addCard(), "add");
         superPanel.add(salesCard(), "sold");
-        superPanel.add(updateCard(), "update");
+        superPanel.add(searchCard(), "update");
         superPanel.add(viewCard(), "view");
         superPanel.add(exportCard, "export");
 
@@ -171,8 +170,13 @@ public class sGUI {
         return salesCard;
     }
     private JPanel updateCard(){
+        String[] values = new String[6];
         final JPanel updateCard = new JPanel();
         updateCard.setLayout(new GridBagLayout());
+
+        JLabel field = new JLabel("Field", SwingConstants.CENTER);
+        JLabel newText = new JLabel("New Values", SwingConstants.CENTER);
+        JLabel oldText = new JLabel("Old Values", SwingConstants.CENTER);
 
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -182,49 +186,66 @@ public class sGUI {
             public void actionPerformed(ActionEvent e) {
             }
         }); // TODO fill out action listener
+        JButton delete = new JButton("Delete this record");
+        delete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        }); // Todo fill action listener
 
 
-        JLabel id = new JLabel("Product ID to be Updated", SwingConstants.CENTER);
-        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
-        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
-        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
-        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
-        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
+        JLabel id = new JLabel("Product ID", SwingConstants.LEFT);
+        JLabel desc = new JLabel("Description", SwingConstants.LEFT);
+        JLabel cogs = new JLabel("COGS", SwingConstants.LEFT);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.LEFT);
+        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.LEFT);
+        JLabel salePrice = new JLabel("Sale Price", SwingConstants.LEFT);
 
-        JTextField idText = new JTextField(1);
-        JTextField descText = new JTextField(1);
-        JTextField cogsText = new JTextField(1);
+        JTextField idText = new JTextField();
+        JTextField descText = new JTextField();
+        JTextField cogsText = new JTextField();
         JDateChooser DateMadeText = new JDateChooser();
         JDateChooser saleDateText = new JDateChooser();
-        JTextField salePriceText = new JTextField(1);
+        JTextField salePriceText = new JTextField();
 
-        updateCard.add(id);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(idText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(desc);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(descText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(cogs);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(cogsText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(DateMade);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(DateMadeText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(saleDate);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(saleDateText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(salePrice);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        updateCard.add(salePriceText);
-        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        JLabel oldID = new JLabel(values[0]);
+        JLabel oldDesc = new JLabel(values[1]);
+        JLabel oldCogs = new JLabel(values[2]);
+        JLabel oldDateMade = new JLabel(values[3]);
+        JLabel oldSaleDate = new JLabel(values[4]);
+        JLabel oldSalePrice = new JLabel(values[5]);
 
-        addComponent(updateCard, submit, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(updateCard, back, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, field, 0,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, newText, 1,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldText, 2,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, id, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, idText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldID, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, desc, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, descText, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldDesc, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, cogs, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, cogsText, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldCogs, 2, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, DateMade, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, DateMadeText, 1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldDateMade, 2, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, saleDate, 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, saleDateText, 1, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldSaleDate, 2, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, salePrice, 0, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, salePriceText, 1, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, oldSalePrice, 2, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(updateCard, submit, 0, 7, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, delete, 0, 8, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, back, 0, 9, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return updateCard;
     }
@@ -301,6 +322,38 @@ public class sGUI {
         addComponent(query, back, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return query;
+    }
+    private JPanel searchCard(){
+        final JPanel superPanel =  new JPanel();
+        superPanel.setLayout(cardPattern);
+        JPanel searchCard = new JPanel();
+        searchCard.setLayout(new GridBagLayout());
+
+        JLabel instructions = new JLabel("Search by product ID", SwingConstants.CENTER);
+        JLabel pID = new JLabel("Product ID");
+        JTextField pText = new JTextField();
+
+        back = new JButton("Back");
+        back.setActionCommand("home");
+        back.addActionListener(new ButtonClickListener());
+        JButton search = new JButton("Search");
+        search.setActionCommand("update");
+        search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CardLayout c1 = (CardLayout) superPanel.getLayout();
+                c1.show(superPanel, e.getActionCommand());
+            }
+        });
+
+        addComponent(searchCard, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(searchCard, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(searchCard, pText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(searchCard, search, 0, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(searchCard, back, 0, 3, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        superPanel.add(searchCard, "search");
+        superPanel.add(updateCard(), "update");
+        return superPanel;
     }
 
     private class ButtonClickListener implements ActionListener {
