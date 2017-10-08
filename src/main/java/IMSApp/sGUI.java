@@ -28,7 +28,6 @@ public class sGUI {
         JPanel exportCard = new JPanel();
 
         cards.setLayout(cardPattern);
-        cards.setSize(500, 500);
 
         superPanel.add(home(), "home");
         superPanel.add(addCard(), "add");
@@ -46,6 +45,7 @@ public class sGUI {
         JPanel superPanel = new JPanel();
         JPanel home = new JPanel();
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
+        outputText = new JLabel("", SwingConstants.CENTER);
 
         JButton madeButton = new JButton("I made something");
         madeButton.setActionCommand("add");
@@ -62,9 +62,6 @@ public class sGUI {
         JButton updateButton = new JButton("Update a record");
         updateButton.setActionCommand("update");
         updateButton.addActionListener(new ButtonClickListener());
-
-        outputText = new JLabel("", SwingConstants.CENTER);
-
 
         home.setLayout(layout);
         home.add(tLabel);
@@ -90,7 +87,7 @@ public class sGUI {
         JLabel desc = new JLabel("Description", SwingConstants.RIGHT);
         JLabel cogs = new JLabel("COGS", SwingConstants.RIGHT);
         JLabel DateMade = new JLabel("Date Made", SwingConstants.RIGHT);
-        outputText = new JLabel(" ", SwingConstants.RIGHT);
+        final JLabel outputText = new JLabel(" ", SwingConstants.RIGHT);
 
         final JTextField idText = new JTextField(1);
         final JTextField descText = new JTextField(1);
@@ -157,8 +154,9 @@ public class sGUI {
         JPanel superPanel = new JPanel();
         superPanel.setLayout(new BorderLayout());
         JPanel salesCard = new JPanel();
-        salesCard.setLayout(new GridLayout(2,3));// TODO Box or Spring Layout
+        salesCard.setLayout(new GridLayout(3,2));// TODO Box or Spring Layout
         JPanel buttons = new JPanel();
+        final JLabel outputText = new JLabel();
 
         JLabel id = new JLabel("Product Id", SwingConstants.CENTER);
         JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
@@ -177,15 +175,14 @@ public class sGUI {
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
-        outputText = new JLabel();
 
         buttons.add(back);
         buttons.add(save);
         salesCard.add(id);
-        salesCard.add(saleDate);
-        salesCard.add(salePrice);
         salesCard.add(idText);
+        salesCard.add(saleDate);
         salesCard.add(saleDateText);
+        salesCard.add(salePrice);
         salesCard.add(salePriceText);
 
         superPanel.add(salesCard, BorderLayout.NORTH);
@@ -196,7 +193,7 @@ public class sGUI {
         final JPanel superPanel = new JPanel();
         superPanel.setLayout(new BorderLayout());
         final JPanel updateCard = new JPanel();
-        updateCard.setLayout(new GridLayout(2, 6)); // TODO spring layout
+        updateCard.setLayout(new GridLayout(6, 2)); // TODO spring layout
         JPanel buttons = new JPanel();
 
         back = new JButton("Back");
@@ -224,16 +221,16 @@ public class sGUI {
         JTextField salePriceText = new JTextField(1);
 
         updateCard.add(id);
-        updateCard.add(desc);
-        updateCard.add(cogs);
-        updateCard.add(DateMade);
-        updateCard.add(saleDate);
-        updateCard.add(salePrice);
         updateCard.add(idText);
+        updateCard.add(desc);
         updateCard.add(descText);
+        updateCard.add(cogs);
         updateCard.add(cogsText);
+        updateCard.add(DateMade);
         updateCard.add(DateMadeText);
+        updateCard.add(saleDate);
         updateCard.add(saleDateText);
+        updateCard.add(salePrice);
         updateCard.add(salePriceText);
 
         buttons.add(back);
@@ -245,12 +242,12 @@ public class sGUI {
         return superPanel;
     }
     private JPanel viewCard(){
-        JPanel superPanel = new JPanel();
-        superPanel.setLayout(new BorderLayout());
         JPanel query = new JPanel();
-        query.setLayout(new GridLayout(4, 2));
-        JPanel buttons = new JPanel();
-        JPanel narrowing = new JPanel();
+        //query.setLayout(new GridLayout(7, 2));
+        GridBagLayout bag = new GridBagLayout();
+        query.setLayout(bag);
+        final JLabel outputText = new JLabel("", SwingConstants.CENTER);
+        GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
         JLabel sold = new JLabel("Show sold items", SwingConstants.CENTER);
@@ -261,7 +258,7 @@ public class sGUI {
         JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
         JDateChooser toDateChoose = new JDateChooser();
-        JLabel unsold = new JLabel("Show unsold items");
+        JLabel unsold = new JLabel("Show unsold items", SwingConstants.CENTER);
         JCheckBox unsoldCheck = new JCheckBox();
 
         back = new JButton("Back");
@@ -275,7 +272,7 @@ public class sGUI {
             }
         });
 
-        JButton excel = new JButton("View in Excel");
+        JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -296,39 +293,42 @@ public class sGUI {
             }
         });
 
-        buttons.add(back);
-        buttons.add(PDF);
-        buttons.add(excel);
-        buttons.add(searchAgain);
-        buttons.add(exportAll);
+        query.add(instructions);
+        addComponent(query, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        query.add(pID);
-        query.add(productIDText);
-        query.add(fromDate);
-        query.add(fromDateChoose);
-        query.add(toDate);
-        query.add(toDateChoose);
+        addComponent(query, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, productIDText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, fromDate, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, fromDateChoose, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, toDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, toDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, sold, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, soldText, 1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, unsold, 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, unsoldCheck, 1, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        narrowing.add(sold);
-        narrowing.add(soldText);
-        narrowing.add(unsold);
-        narrowing.add(unsoldCheck);
+        addComponent(query, PDF, 0, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, excel, 1, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, searchAgain, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAll, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, back, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        superPanel.add(instructions, BorderLayout.PAGE_START);
-        superPanel.add(narrowing, BorderLayout.NORTH);
-        superPanel.add(query, BorderLayout.CENTER);
-        superPanel.add(buttons, BorderLayout.SOUTH);
-        return superPanel;
+        return query;
     }
-
-
 
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
             CardLayout c1 = (CardLayout) superPanel.getLayout();
             c1.show(superPanel, e.getActionCommand());
-        }
+        } // end method
+    } // end private class
 
+    private static void addComponent(Container container, Component component, int gridx, int gridy,
+                                     int gridwidth, int gridheight, int anchor, int fill) {
+        Insets insets = new Insets(0,0, 0, 0);
+        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
+                anchor, fill, insets, 0, 0);
+        container.add(component, gbc);
     }
-
-}
+}//end of class
