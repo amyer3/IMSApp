@@ -20,7 +20,7 @@ public class sGUI {
     public static void main(String[] args) {
     }
 
-    public void doGui(){
+    public void doGui() throws java.lang.InterruptedException {
         cards = new JFrame();
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
@@ -71,8 +71,8 @@ public class sGUI {
         addComponent(home, outputText, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         return home;
     }
-    private JPanel addCard(){
-        final JPanel addCard = new JPanel(); // TODO Box or Spring Layout
+    private JPanel addCard() {
+        final JPanel addCard = new JPanel();
         GridBagLayout bagLayout = new GridBagLayout();
         addCard.setLayout(bagLayout);
 
@@ -91,12 +91,11 @@ public class sGUI {
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
 
-        JButton addButton = new JButton("Submit and Save");
+        final JButton addButton = new JButton("Submit and Save");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
                     String[] values = new String[4];
-                    outputText.setText(DateMadeText.getDate().toString());
                     values[0] = idText.getText();
                     values[1] = descText.getText();
                     values[2] = cogsText.getText();
@@ -108,10 +107,8 @@ public class sGUI {
                        // throw new NullPointerException();
                    // }
                     //TODO uncomment for full functionality
-
-
                 }catch (NullPointerException ex){
-                    outputText.setText("All fields are required");
+                    outputText.setText("Add failed: all fields are required (error: nullPointer)");
                     ex.printStackTrace();
                 }
                 finally {
@@ -120,7 +117,6 @@ public class sGUI {
                     cogsText.setText("");
                     DateMadeText.setDate(null);
                 }
-
             }
         });
 
@@ -138,13 +134,10 @@ public class sGUI {
         addComponent(addCard, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return addCard;
-    }
+    } // TODO uncomment but then complete
     private JPanel salesCard(){
-        JPanel superPanel = new JPanel();
-        superPanel.setLayout(new BorderLayout());
         JPanel salesCard = new JPanel();
-        salesCard.setLayout(new GridLayout(3,2));// TODO Box or Spring Layout
-        JPanel buttons = new JPanel();
+        salesCard.setLayout(new GridBagLayout());// TODO Box or Spring Layout
         final JLabel outputText = new JLabel();
 
         JLabel id = new JLabel("Product Id", SwingConstants.CENTER);
@@ -165,25 +158,21 @@ public class sGUI {
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
 
-        buttons.add(back);
-        buttons.add(save);
-        salesCard.add(id);
-        salesCard.add(idText);
-        salesCard.add(saleDate);
-        salesCard.add(saleDateText);
-        salesCard.add(salePrice);
-        salesCard.add(salePriceText);
+        addComponent(salesCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, idText, 1, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, saleDate, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, saleDateText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, salePrice, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, salePriceText, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, save, 0, 3, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, back, 0, 4, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(salesCard, outputText, 0, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        superPanel.add(salesCard, BorderLayout.NORTH);
-        superPanel.add(buttons, BorderLayout.SOUTH);
-        return superPanel;
+        return salesCard;
     }
     private JPanel updateCard(){
-        final JPanel superPanel = new JPanel();
-        superPanel.setLayout(new BorderLayout());
         final JPanel updateCard = new JPanel();
-        updateCard.setLayout(new GridLayout(6, 2)); // TODO spring layout
-        JPanel buttons = new JPanel();
+        updateCard.setLayout(new GridBagLayout());
 
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -210,25 +199,34 @@ public class sGUI {
         JTextField salePriceText = new JTextField(1);
 
         updateCard.add(id);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(idText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(desc);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(descText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(cogs);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(cogsText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(DateMade);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(DateMadeText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(saleDate);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(saleDateText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(salePrice);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         updateCard.add(salePriceText);
+        addComponent(updateCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        buttons.add(back);
-        buttons.add(submit);
+        addComponent(updateCard, submit, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(updateCard, back, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-
-        superPanel.add(updateCard, BorderLayout.NORTH);
-        superPanel.add(buttons, BorderLayout.SOUTH);
-        return superPanel;
+        return updateCard;
     }
     private JPanel viewCard(){
         JPanel query = new JPanel();
