@@ -13,6 +13,11 @@ public class sGUI {
     JButton back;
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
+    String[] searchResults = new String[6];
+    /* send array into update panel by assign in search panel
+    have DBHandler search method return an array, and use that to set with setArray method
+     */
+
     //Connection databaseConnection = Operations.firstRun();
     // TODO uncomment for full functionality
 
@@ -170,7 +175,6 @@ public class sGUI {
         return salesCard;
     }
     private JPanel updateCard(){
-        String[] values = new String[6];
         final JPanel updateCard = new JPanel();
         updateCard.setLayout(new GridBagLayout());
 
@@ -208,12 +212,12 @@ public class sGUI {
         JDateChooser saleDateText = new JDateChooser();
         JTextField salePriceText = new JTextField();
 
-        JLabel oldID = new JLabel(values[0]);
-        JLabel oldDesc = new JLabel(values[1]);
-        JLabel oldCogs = new JLabel(values[2]);
-        JLabel oldDateMade = new JLabel(values[3]);
-        JLabel oldSaleDate = new JLabel(values[4]);
-        JLabel oldSalePrice = new JLabel(values[5]);
+        JLabel oldID = new JLabel(searchResults[0]);
+        JLabel oldDesc = new JLabel(searchResults[1]);
+        JLabel oldCogs = new JLabel(searchResults[2]);
+        JLabel oldDateMade = new JLabel(searchResults[3]);
+        JLabel oldSaleDate = new JLabel(searchResults[4]);
+        JLabel oldSalePrice = new JLabel(searchResults[5]);
 
         addComponent(updateCard, field, 0,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(updateCard, newText, 1,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
@@ -332,16 +336,21 @@ public class sGUI {
         JLabel instructions = new JLabel("Search by product ID", SwingConstants.CENTER);
         JLabel pID = new JLabel("Product ID");
         JTextField pText = new JTextField();
+        searchResults[0]= "0";
+        searchResults[1]="1";
+        searchResults[2]="2";
+        searchResults[3]="3";
+        searchResults[4]="4";
+        searchResults[5]="5";
 
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
         JButton search = new JButton("Search");
-        search.setActionCommand("update");
         search.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 CardLayout c1 = (CardLayout) superPanel.getLayout();
-                c1.show(superPanel, e.getActionCommand());
+                c1.show(superPanel,"update" );
             }
         });
 
@@ -363,11 +372,14 @@ public class sGUI {
         } // end method
     } // end private class
 
-    private static void addComponent(Container container, Component component, int gridx, int gridy,
-                                     int gridwidth, int gridheight, int anchor, int fill) {
+    private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
         Insets insets = new Insets(0,0, 0, 0);
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
                 anchor, fill, insets, 0, 0);
         container.add(component, gbc);
+    }
+
+    private void setArray(String[] setValues){
+        System.arraycopy(setValues, 0, searchResults, 0, setValues.length);
     }
 }//end of class
