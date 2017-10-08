@@ -42,8 +42,8 @@ public class sGUI {
 
     }
     private JPanel home(){
-        JPanel superPanel = new JPanel();
         JPanel home = new JPanel();
+        home.setLayout(new GridBagLayout());
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
         outputText = new JLabel("", SwingConstants.CENTER);
 
@@ -63,35 +63,28 @@ public class sGUI {
         updateButton.setActionCommand("update");
         updateButton.addActionListener(new ButtonClickListener());
 
-        home.setLayout(layout);
-        home.add(tLabel);
-        home.add(madeButton);
-        home.add(soldButton);
-        home.add(viewButton);
-        home.add(updateButton);
-        home.add(outputText);
-        superPanel.add(home);
-        return superPanel;
+        addComponent(home, tLabel, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(home, madeButton, 0, 1, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(home, soldButton, 0, 3, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(home, viewButton, 0, 5, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(home, updateButton, 0, 7, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(home, outputText, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        return home;
     }
     private JPanel addCard(){
-        JPanel superPanel = new JPanel();
-        superPanel.setLayout(new BorderLayout());
-        JPanel buttons = new JPanel();
-        JPanel status = new JPanel();
         final JPanel addCard = new JPanel(); // TODO Box or Spring Layout
-        addCard.setBorder(BorderFactory.createEtchedBorder());
-        buttons.setBorder(BorderFactory.createEtchedBorder());
-        final GridLayout addLayout = new GridLayout(5, 2);
+        GridBagLayout bagLayout = new GridBagLayout();
+        addCard.setLayout(bagLayout);
 
-        JLabel id = new JLabel("Product ID", SwingConstants.RIGHT);
-        JLabel desc = new JLabel("Description", SwingConstants.RIGHT);
-        JLabel cogs = new JLabel("COGS", SwingConstants.RIGHT);
-        JLabel DateMade = new JLabel("Date Made", SwingConstants.RIGHT);
-        final JLabel outputText = new JLabel(" ", SwingConstants.RIGHT);
+        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
+        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
+        final JLabel outputText = new JLabel(" ", SwingConstants.CENTER);
 
-        final JTextField idText = new JTextField(1);
-        final JTextField descText = new JTextField(1);
-        final JTextField cogsText = new JTextField(1);
+        final JTextField idText = new JTextField();
+        final JTextField descText = new JTextField();
+        final JTextField cogsText = new JTextField();
         final JDateChooser DateMadeText = new JDateChooser();
 
         back = new JButton("Back");
@@ -110,6 +103,7 @@ public class sGUI {
                     values[3] = DateMadeText.getDate().toString();
                     //if(Operations.blankChecker(values)){
                         //DBHandler.addRec(databaseConnection,values);
+                        //outputText.setText("Record added to database")
                     //} else {
                        // throw new NullPointerException();
                    // }
@@ -130,25 +124,20 @@ public class sGUI {
             }
         });
 
-        addCard.add(id);
-        addCard.add(idText);
-        addCard.add(desc);
-        addCard.add(descText);
-        addCard.add(cogs);
-        addCard.add(cogsText);
-        addCard.add(DateMade);
-        addCard.add(DateMadeText);
+        addComponent(addCard, id, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, idText, 1, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, desc, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, descText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, cogs, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, cogsText, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, DateMade,0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, DateMadeText, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        buttons.add(back);
-        buttons.add(addButton);
-        status.add(outputText);
+        addComponent(addCard, addButton, 0, 4, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, back, 0, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(addCard, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        addCard.setLayout(addLayout);
-
-        superPanel.add(addCard, BorderLayout.NORTH);
-        superPanel.add(buttons, BorderLayout.CENTER);
-        superPanel.add(status, BorderLayout.AFTER_LAST_LINE);
-        return superPanel;
+        return addCard;
     }
     private JPanel salesCard(){
         JPanel superPanel = new JPanel();
@@ -243,7 +232,6 @@ public class sGUI {
     }
     private JPanel viewCard(){
         JPanel query = new JPanel();
-        //query.setLayout(new GridLayout(7, 2));
         GridBagLayout bag = new GridBagLayout();
         query.setLayout(bag);
         final JLabel outputText = new JLabel("", SwingConstants.CENTER);
@@ -270,28 +258,28 @@ public class sGUI {
             public void actionPerformed(ActionEvent e) {
 
             }
-        });
+        }); //todo
 
         JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
-        });
+        }); //todo
 
         JButton searchAgain = new JButton("New Search");
         searchAgain.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
-        });
+        }); //todo
 
         JButton exportAll = new JButton("Export ALL Records to Excel");
         exportAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
-        });
+        }); // todo
 
         query.add(instructions);
         addComponent(query, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
