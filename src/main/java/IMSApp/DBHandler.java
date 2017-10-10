@@ -3,7 +3,6 @@ package IMSApp;
 import java.sql.*;
 
 public class DBHandler {
-    public static String DBloc = "jdbc:hsqldb:file:maindb";
 
     public static void main(String[] args) {}
 
@@ -16,12 +15,12 @@ public class DBHandler {
     }
 
     public static Connection connect(){
-        Connection maindbCon = null;
+        String DBloc = "jdbc:hsqldb:file:maindb";
+        Connection maindbCon=null;
         try {
             maindbCon = DriverManager.getConnection(DBloc);
         } catch (java.sql.SQLException e) {
             System.out.println("error initializing database");
-            e.printStackTrace();
         }
         return maindbCon;
     }
