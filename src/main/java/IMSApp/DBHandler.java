@@ -26,37 +26,52 @@ public class DBHandler {
         return maindbCon;
     }
 
-    public static void deleteRec(Connection c, String id) throws java.sql.SQLException{} //TODO delete a record
+    public static void deleteRec(String id) {
+        Connection c = connect();
+    } //TODO delete a record
 
-    public static void createFullDB(Connection c){
+    public static void createFullDB(){
+        Connection c = connect();
         try {
             Statement stmt = c.createStatement();
-            stmt.executeUpdate("CREATE TABLE inventory " +
-                    "(ID varchar(255) NOT NULL," +
+            stmt.executeUpdate("CREATE TABLE inventory(" +
+                    "ID varchar(255) NOT NULL," +
                     "Desc varchar(255)," +
                     "COGS float, " +
                     "Date_Made DATE, " +
                     "Sold boolean, " +
-                    "Sale_Date DATE)");
+                    "Sale_Date DATE)"
+            );
             System.out.println("Table Created");
+            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void addRec(Connection c, String[] items) throws java.sql.SQLException {
+    public static void addRec(String[] items) throws java.sql.SQLException {
+        Connection c = connect();
         Statement stmt = c.createStatement();
         ResultSet rs = stmt.executeQuery("INSERT INTO inventory (ID varchar(255) NOT NULL, Desc varchar(255), COGS float, " +
                 "Date_Made DATE, Sold boolean) VALUES " +
                 "("+items[0]+items[1]+items[2]+items[3]+"false)");
+        c.close();
     } //TODO unexpected token VARCHAR
 
-    public void soldRec(Connection c, String[] items) {} //TODO updates for sold
+    public void soldRec(String[] items) {
+        Connection c = connect();
+    } //TODO updates for sold
 
-    public void update(Connection c, String[] items) {
+    public void update(String[] items) {
+        Connection c = connect();
     }
 
-    public void searchDates(Connection c){}
+    public void searchDates(String from, String to){
+        Connection c = connect();
+    }
 
-    public void searchID(Connection c){}
+    public void searchID(String id){
+        Connection c = connect();
+    }
+
 }
