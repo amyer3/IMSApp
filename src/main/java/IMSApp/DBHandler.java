@@ -85,9 +85,25 @@ public class DBHandler {
         return null;
     }
 
-    public String[] searchID(String id){
+    public static String[] searchID(String id){
         Connection c = connect();
-        return null;
+        String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
+        String[] results = new String[6];
+        String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date"};
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(q);
+            while (rs.next()){
+                for (int i = 0; i <  6; i++) {
+                    results[i] = rs.getString(cols[i]);
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(results[3]);
+        return results;
     }
 
 }

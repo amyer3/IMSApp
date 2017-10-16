@@ -207,8 +207,13 @@ public class sGUI {
         JLabel oldSalePrice = new JLabel("", SwingConstants.RIGHT);
 
         idText.addKeyListener(new KeyListener() {
+            public void keyTyped(KeyEvent e) {}
+
+            public void keyPressed(KeyEvent e) {}
+
             public void keyReleased(KeyEvent e) {
                 oldID.setText(idText.getText());
+                String values[] = DBHandler.searchID(idText.getText());
             }
         });
 
