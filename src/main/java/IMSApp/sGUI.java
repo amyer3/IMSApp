@@ -4,10 +4,10 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class sGUI {
     JLabel outputText;
@@ -16,7 +16,6 @@ public class sGUI {
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
     String[] searchResults = new String[6];
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /* send array into update panel by assign in search panel
     have DBHandler search method return an array, and use that to set with setArray method
      */
@@ -99,12 +98,15 @@ public class sGUI {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
-                    Date date = DateMadeText.getDate();
-                    String fDate = dateFormat.format(date);
-                    String[] values = {idText.getText(), descText.getText(), cogsText.getText(), fDate};
+                    String[] values = {
+                            idText.getText(),
+                            descText.getText(),
+                            cogsText.getText(),
+                            Operations.scrubDate(DateMadeText.getDate())
+                    };
                     if(Operations.blankChecker(values)){
                         DBHandler.addRec(values);
-                        outputText.setText("Record added to database");
+                        outputText.setText("Record added to database!");
                     } else {
                         throw new NullPointerException();
                     }
@@ -171,7 +173,6 @@ public class sGUI {
         return salesCard;
     }
     private JPanel updateCard(){
-        final String[] values = new String[6];
         final JPanel updateCard = new JPanel();
         updateCard.setLayout(new GridBagLayout());
 
@@ -183,16 +184,16 @@ public class sGUI {
         JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
         JLabel desc = new JLabel("Description", SwingConstants.CENTER);
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
-        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
+        final JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
         JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
         JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
 
         final JTextField idText = new JTextField();
-        JTextField descText = new JTextField();
-        JTextField cogsText = new JTextField();
-        JDateChooser DateMadeText = new JDateChooser();
-        JDateChooser saleDateText = new JDateChooser();
-        JTextField salePriceText = new JTextField();
+        final JTextField descText = new JTextField();
+        final JTextField cogsText = new JTextField();
+        final JDateChooser DateMadeText = new JDateChooser();
+        final JDateChooser saleDateText = new JDateChooser();
+        final JTextField salePriceText = new JTextField();
 
         /*
         the following JLabels should show in real time the information
@@ -200,11 +201,11 @@ public class sGUI {
          */
 
         final JLabel oldID = new JLabel("", SwingConstants.RIGHT);
-        JLabel oldDesc = new JLabel("", SwingConstants.RIGHT);
-        JLabel oldCogs = new JLabel("", SwingConstants.RIGHT);
-        JLabel oldDateMade = new JLabel("", SwingConstants.RIGHT);
-        JLabel oldSaleDate = new JLabel("", SwingConstants.RIGHT);
-        JLabel oldSalePrice = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldDesc = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldCogs = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldDateMade = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldSaleDate = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldSalePrice = new JLabel("", SwingConstants.RIGHT);
 
         idText.addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {}
@@ -214,18 +215,35 @@ public class sGUI {
             public void keyReleased(KeyEvent e) {
                 oldID.setText(idText.getText());
                 String values[] = DBHandler.searchID(idText.getText());
+
+                //String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date", "Sale_Price"};
+                oldDesc.setText(values[1]);
+                oldCogs.setText(values[2]);
+                oldDateMade.setText(values[3]);
+                oldSaleDate.setText(values[5]);
+                oldSalePrice.setText(values[6]);
             }
         });
 
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
+
         JButton submit = new JButton("Submit and Save");
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String[] values = {
+                        descText.getText(),
+                        cogsText.getText(),
+                        Operations.scrubDate(DateMadeText.getDate()),
+                        Operations.scrubDate(saleDateText.getDate()),
+                        salePriceText.getText()
+                };
+
 
             }
         }); // TODO fill out action listener
+
         JButton delete = new JButton("Delete this record");
         delete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -40,9 +40,9 @@ public class DBHandler {
                     "COGS float, " +
                     "Date_Made DATE, " +
                     "Sold boolean, " +
-                    "Sale_Date DATE)"
+                    "Sale_Date DATE, " +
+                    "Sale_Price float)"
             );
-            System.out.println("Table Created");
             c.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class DBHandler {
         Connection c = connect();
         String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
         String[] results = new String[6];
-        String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date"};
+        String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date", "Sale_Price"};
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(q);
@@ -100,7 +100,7 @@ public class DBHandler {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Record not Found (DBHandler.searchID)");
         }
         System.out.println(results[3]);
         return results;
