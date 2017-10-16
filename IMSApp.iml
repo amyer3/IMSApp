@@ -15,5 +15,6 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.7-dmr" level="project" />
     <orderEntry type="library" name="Maven: com.toedter:jcalendar:1.4" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.12" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations-java5:15.0" level="project" />
   </component>
 </module>

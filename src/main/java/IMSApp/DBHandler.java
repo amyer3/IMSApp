@@ -39,9 +39,9 @@ public class DBHandler {
                     "Desc varchar(255)," +
                     "COGS float, " +
                     "Date_Made DATE, " +
-                    "Sold boolean, " +
                     "Sale_Date DATE, " +
-                    "Sale_Price float)"
+                    "Sale_Price float" +
+                    "Sold boolean)"
             );
             c.close();
         } catch (SQLException e) {
@@ -76,8 +76,21 @@ public class DBHandler {
         }
     } //TODO updates for sold
 
-    public void update(String[] items) {
+    public static void update(String[] items) {
         Connection c = connect();
+        try{
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("UPDATE inventory SET " +
+                    "Desc = '" + items[1]+"' , "+
+                    "COGS = '" + items[2]+"' , "+
+                    "Date_Made = '" + items[3]+"' , "+
+                    "Sale_Date = '" + items[4]+"' , "+
+                    "Sale_Price = '" + items[5]+"' , "+
+                    "WHERE ID = '"+items[0]+"' ");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public String[] searchDates(String from, String to){
@@ -107,3 +120,10 @@ public class DBHandler {
     }
 
 }
+"ID varchar(255) NOT NULL," +
+        "Desc varchar(255)," +
+        "COGS float, " +
+        "Date_Made DATE, " +
+        "Sold boolean, " +
+        "Sale_Date DATE, " +
+        "Sale_Price float)"

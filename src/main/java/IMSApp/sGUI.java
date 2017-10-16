@@ -10,16 +10,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class sGUI {
-    JLabel outputText;
     JFrame cards;
     JButton back;
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
-    String[] searchResults = new String[6];
-    /* send array into update panel by assign in search panel
-    have DBHandler search method return an array, and use that to set with setArray method
-     */
-    // TODO uncomment for full functionality
 
     public static void main(String[] args) {
     }
@@ -48,7 +42,7 @@ public class sGUI {
         JPanel home = new JPanel();
         home.setLayout(new GridBagLayout());
         JLabel tLabel = new JLabel("Country Craftsman Inventory System", SwingConstants.CENTER);
-        outputText = new JLabel("", SwingConstants.CENTER);
+        JLabel outputText = new JLabel("", SwingConstants.CENTER);
 
         JButton madeButton = new JButton("I made something");
         madeButton.setActionCommand("add");
@@ -232,13 +226,21 @@ public class sGUI {
         JButton submit = new JButton("Submit and Save");
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String[] values = {
+                String[] newValues = {
                         descText.getText(),
                         cogsText.getText(),
                         Operations.scrubDate(DateMadeText.getDate()),
                         Operations.scrubDate(saleDateText.getDate()),
                         salePriceText.getText()
                 };
+                String[] oldValues = {
+                        oldDesc.getText(),
+                        oldCogs.getText(),
+                        oldDateMade.getText(),
+                        oldSaleDate.getText(),
+                        oldSalePrice.getText()
+                };
+                DBHandler.update(Operations.updateArray(oldValues, newValues));
 
 
             }
@@ -361,7 +363,6 @@ public class sGUI {
         return query;
     }
 
-
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
             CardLayout c1 = (CardLayout) superPanel.getLayout();
@@ -376,7 +377,4 @@ public class sGUI {
         container.add(component, gbc);
     }
 
-    private void setArray(String[] setValues){
-        System.arraycopy(setValues, 0, searchResults, 0, setValues.length);
-    }
 }//end of class

@@ -1,4 +1,6 @@
 package IMSApp;
+import com.sun.istack.internal.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -36,8 +38,18 @@ public class Operations {
         return checked;
     }
 
+    @NotNull
     public static String scrubDate(Date date){
         return dateFormat.format(date);
+    }
+
+    public static String[] updateArray(String[] oldValues, String[] newValues){
+        for (int i = 0; i < newValues.length; i++) {
+            if(newValues[i] == null){
+                newValues[i] = oldValues[i];
+            } // if statement
+        } // for statement
+        return newValues;
     }
 
 }

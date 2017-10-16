@@ -37,6 +37,11 @@
           <artifactId>itextpdf</artifactId>
           <version>5.5.12</version>
       </dependency>
+      <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations-java5</artifactId>
+          <version>RELEASE</version>
+      </dependency>
 
   </dependencies>
 </project>
