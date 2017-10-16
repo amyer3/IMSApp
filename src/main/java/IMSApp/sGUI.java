@@ -227,6 +227,7 @@ public class sGUI {
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String[] newValues = {
+                        idText.getText(),
                         descText.getText(),
                         cogsText.getText(),
                         Operations.scrubDate(DateMadeText.getDate()),
@@ -234,6 +235,7 @@ public class sGUI {
                         salePriceText.getText()
                 };
                 String[] oldValues = {
+                        oldID.getText(),
                         oldDesc.getText(),
                         oldCogs.getText(),
                         oldDateMade.getText(),
@@ -241,10 +243,8 @@ public class sGUI {
                         oldSalePrice.getText()
                 };
                 DBHandler.update(Operations.updateArray(oldValues, newValues));
-
-
             }
-        }); // TODO fill out action listener
+        });
 
         JButton delete = new JButton("Delete this record");
         delete.addActionListener(new ActionListener() {

@@ -120,10 +120,3 @@ public class DBHandler {
     }
 
 }
-"ID varchar(255) NOT NULL," +
-        "Desc varchar(255)," +
-        "COGS float, " +
-        "Date_Made DATE, " +
-        "Sold boolean, " +
-        "Sale_Date DATE, " +
-        "Sale_Price float)"
