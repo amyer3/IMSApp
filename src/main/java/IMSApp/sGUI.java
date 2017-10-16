@@ -4,9 +4,10 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class sGUI {
     JLabel outputText;
@@ -15,6 +16,7 @@ public class sGUI {
     CardLayout cardPattern = new CardLayout();
     JPanel superPanel;
     String[] searchResults = new String[6];
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /* send array into update panel by assign in search panel
     have DBHandler search method return an array, and use that to set with setArray method
      */
@@ -23,7 +25,7 @@ public class sGUI {
     public static void main(String[] args) {
     }
 
-    public void doGui() throws java.lang.InterruptedException {
+    public void doGui() {
         cards = new JFrame();
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
@@ -33,7 +35,7 @@ public class sGUI {
         superPanel.add(home(), "home");
         superPanel.add(addCard(), "add");
         superPanel.add(salesCard(), "sold");
-        superPanel.add(searchCard(), "search");
+        superPanel.add(updateCard(), "search");
         superPanel.add(viewCard(), "view");
         Dimension size = new Dimension(900, 900);
 
@@ -97,20 +99,18 @@ public class sGUI {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
-                    String[] values = new String[4];
-                    values[0] = idText.getText();
-                    values[1] = descText.getText();
-                    values[2] = cogsText.getText();
-                    values[3] = DateMadeText.getDate().toString();
+                    Date date = DateMadeText.getDate();
+                    String fDate = dateFormat.format(date);
+                    String[] values = {idText.getText(), descText.getText(), cogsText.getText(), fDate};
                     if(Operations.blankChecker(values)){
                         DBHandler.addRec(values);
                         outputText.setText("Record added to database");
-                    } else {throw new NullPointerException();}
+                    } else {
+                        throw new NullPointerException();
+                    }
                 }catch (NullPointerException ex){
                     outputText.setText("Add failed: all fields are required (error: nullPointer)");
-                } catch (SQLException e1) {
-                    outputText.setText("Can not add to database (error: Database Connection)");
-                } finally {
+                }finally {
                     idText.setText("");
                     descText.setText("");
                     cogsText.setText("");
@@ -133,7 +133,7 @@ public class sGUI {
         addComponent(addCard, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return addCard;
-    } // TODO uncomment but then complete
+    } // TODO COMPLETE
     private JPanel salesCard(){
         JPanel salesCard = new JPanel();
         salesCard.setLayout(new GridBagLayout());// TODO Box or Spring Layout
@@ -141,15 +141,16 @@ public class sGUI {
 
         JLabel id = new JLabel("Product Id", SwingConstants.CENTER);
         JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
-        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
+        final JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
 
-        JTextField idText = new JTextField(1);
-        JDateChooser saleDateText = new JDateChooser();
-        JTextField salePriceText = new JTextField(1);
+        final JTextField idText = new JTextField(1);
+        final JDateChooser saleDateText = new JDateChooser();
+        final JTextField salePriceText = new JTextField(1);
 
         JButton save = new JButton("Submit and Save");
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
 
             }
         }); //Todo fill out action
@@ -169,49 +170,8 @@ public class sGUI {
 
         return salesCard;
     }
-    private JPanel searchCard(){
+    private JPanel updateCard(){
         final String[] values = new String[6];
-        final JPanel superPanel =  new JPanel();
-        superPanel.setLayout(cardPattern);
-        JPanel searchCard = new JPanel();
-        searchCard.setLayout(new GridBagLayout());
-
-        JLabel instructions = new JLabel("Search by product ID", SwingConstants.CENTER);
-        JLabel pID = new JLabel("Product ID");
-        JTextField pText = new JTextField();
-
-        back = new JButton("Back");
-        back.setActionCommand("home");
-        back.addActionListener(new ButtonClickListener());
-        JButton search = new JButton("Search");
-        search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardLayout c1 = (CardLayout) superPanel.getLayout();
-                c1.show(superPanel,"results" );
-                values[0]="0";
-                values[1]="1";
-                values[2]="2";
-                values[3]="3";
-                values[4]="4";
-                values[5]="5";
-
-            }
-        });
-
-        addComponent(searchCard, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(searchCard, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(searchCard, pText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(searchCard, search, 0, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(searchCard, back, 0, 3, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-        superPanel.add(searchCard, "search");
-        superPanel.add(updateCard(values), "results");
-        return superPanel;
-    }
-    private JPanel updateCard(final String[] input){
-        final String[] values = new String[6];
-        System.arraycopy(input, 0, values, 0, input.length);
-        //use array to pass in data, do search on this page
         final JPanel updateCard = new JPanel();
         updateCard.setLayout(new GridBagLayout());
 
@@ -219,18 +179,46 @@ public class sGUI {
         JLabel newText = new JLabel("New Values", SwingConstants.CENTER);
         JLabel oldText = new JLabel("Old Values", SwingConstants.CENTER);
 
+
+        JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
+        JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
+        JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
+        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
+        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
+
+        final JTextField idText = new JTextField();
+        JTextField descText = new JTextField();
+        JTextField cogsText = new JTextField();
+        JDateChooser DateMadeText = new JDateChooser();
+        JDateChooser saleDateText = new JDateChooser();
+        JTextField salePriceText = new JTextField();
+
+        /*
+        the following JLabels should show in real time the information
+        retreived from searching in JTextField "idText"
+         */
+
+        final JLabel oldID = new JLabel("", SwingConstants.RIGHT);
+        JLabel oldDesc = new JLabel("", SwingConstants.RIGHT);
+        JLabel oldCogs = new JLabel("", SwingConstants.RIGHT);
+        JLabel oldDateMade = new JLabel("", SwingConstants.RIGHT);
+        JLabel oldSaleDate = new JLabel("", SwingConstants.RIGHT);
+        JLabel oldSalePrice = new JLabel("", SwingConstants.RIGHT);
+
+        idText.addKeyListener(new KeyListener() {
+            public void keyReleased(KeyEvent e) {
+                oldID.setText(idText.getText());
+            }
+        });
+
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
         JButton submit = new JButton("Submit and Save");
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                values[0]=null;
-                values[1]=null;
-                values[2]=null;
-                values[3]=null;
-                values[4]=null;
-                values[5]=null;
+
             }
         }); // TODO fill out action listener
         JButton delete = new JButton("Delete this record");
@@ -239,28 +227,6 @@ public class sGUI {
 
             }
         }); // Todo fill action listener
-
-
-        JLabel id = new JLabel("Product ID", SwingConstants.LEFT);
-        JLabel desc = new JLabel("Description", SwingConstants.LEFT);
-        JLabel cogs = new JLabel("COGS", SwingConstants.LEFT);
-        JLabel DateMade = new JLabel("Date Made", SwingConstants.LEFT);
-        JLabel saleDate = new JLabel("Date of Sale", SwingConstants.LEFT);
-        JLabel salePrice = new JLabel("Sale Price", SwingConstants.LEFT);
-
-        JTextField idText = new JTextField();
-        JTextField descText = new JTextField();
-        JTextField cogsText = new JTextField();
-        JDateChooser DateMadeText = new JDateChooser();
-        JDateChooser saleDateText = new JDateChooser();
-        JTextField salePriceText = new JTextField();
-
-        JLabel oldID = new JLabel(searchResults[0], SwingConstants.RIGHT);
-        JLabel oldDesc = new JLabel(searchResults[1], SwingConstants.RIGHT);
-        JLabel oldCogs = new JLabel(searchResults[2], SwingConstants.RIGHT);
-        JLabel oldDateMade = new JLabel(searchResults[3], SwingConstants.RIGHT);
-        JLabel oldSaleDate = new JLabel(searchResults[4], SwingConstants.RIGHT);
-        JLabel oldSalePrice = new JLabel(searchResults[5], SwingConstants.RIGHT);
 
         addComponent(updateCard, field, 0,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(updateCard, newText, 1,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
