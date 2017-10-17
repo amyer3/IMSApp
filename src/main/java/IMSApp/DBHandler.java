@@ -8,7 +8,6 @@ public class DBHandler {
     public static void Shutdown(){
         try {
             DriverManager.getConnection(DBloc+";shutdown=true");
-            System.out.println("Save and exited");
         } catch (java.sql.SQLException e){
             e.printStackTrace();
         }
@@ -17,8 +16,7 @@ public class DBHandler {
     public static Connection connect(){
         Connection maindbCon=null;
         try {
-            maindbCon = DriverManager.getConnection(DBloc);
-            System.out.println(maindbCon.getMetaData());
+            maindbCon = DriverManager.getConnection(DBloc+";shutdown=true");
         } catch (java.sql.SQLException e) {
             System.out.println("error initializing database");
             e.printStackTrace();
@@ -40,7 +38,7 @@ public class DBHandler {
                     "COGS float, " +
                     "Date_Made DATE, " +
                     "Sale_Date DATE, " +
-                    "Sale_Price float" +
+                    "Sale_Price float," +
                     "Sold boolean)"
             );
             c.close();
@@ -67,7 +65,11 @@ public class DBHandler {
         Connection c = connect();
         try{
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT FROM inventory");
+            ResultSet rs = stmt.executeQuery("UPDATE inventory SET " +
+                    "Sale_Date = '" + items[1]+"' , "+
+                    "Sale_Price = '" + items[2]+"' "+
+                    "Sold = 'true' "+
+                    "WHERE ID = "+items[0]);
 
             c.close();
         }
@@ -80,13 +82,14 @@ public class DBHandler {
         Connection c = connect();
         try{
             Statement stmt = c.createStatement();
+            //user lacks privilege or object not found: WHERE
             ResultSet rs = stmt.executeQuery("UPDATE inventory SET " +
                     "Desc = '" + items[1]+"' , "+
                     "COGS = '" + items[2]+"' , "+
                     "Date_Made = '" + items[3]+"' , "+
                     "Sale_Date = '" + items[4]+"' , "+
-                    "Sale_Price = '" + items[5]+"' , "+
-                    "WHERE ID = '"+items[0]+"' ");
+                    "Sale_Price = '" + items[5]+"' "+
+                    "WHERE ID = "+items[0]);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,13 +104,13 @@ public class DBHandler {
     public static String[] searchID(String id){
         Connection c = connect();
         String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
-        String[] results = new String[6];
+        String[] results = new String[7];
         String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date", "Sale_Price"};
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(q);
             while (rs.next()){
-                for (int i = 0; i <  6; i++) {
+                for (int i = 0; i <  7; i++) {
                     results[i] = rs.getString(cols[i]);
 
                 }
@@ -115,7 +118,6 @@ public class DBHandler {
         } catch (SQLException e) {
             System.out.println("Record not Found (DBHandler.searchID)");
         }
-        System.out.println(results[3]);
         return results;
     }
 

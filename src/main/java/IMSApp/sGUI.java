@@ -180,7 +180,7 @@ public class sGUI {
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
         final JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
         JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
-        JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
+        final JLabel salePrice = new JLabel("Sale Price", SwingConstants.CENTER);
 
         final JTextField idText = new JTextField();
         final JTextField descText = new JTextField();
@@ -194,12 +194,12 @@ public class sGUI {
         retreived from searching in JTextField "idText"
          */
 
-        final JLabel oldID = new JLabel("", SwingConstants.RIGHT);
-        final JLabel oldDesc = new JLabel("", SwingConstants.RIGHT);
-        final JLabel oldCogs = new JLabel("", SwingConstants.RIGHT);
-        final JLabel oldDateMade = new JLabel("", SwingConstants.RIGHT);
-        final JLabel oldSaleDate = new JLabel("", SwingConstants.RIGHT);
-        final JLabel oldSalePrice = new JLabel("", SwingConstants.RIGHT);
+        final JLabel oldID = new JLabel("", SwingConstants.CENTER);
+        final JLabel oldDesc = new JLabel("", SwingConstants.CENTER);
+        final JLabel oldCogs = new JLabel("", SwingConstants.CENTER);
+        final JLabel oldDateMade = new JLabel("", SwingConstants.CENTER);
+        final JLabel oldSaleDate = new JLabel("", SwingConstants.CENTER);
+        final JLabel oldSalePrice = new JLabel("", SwingConstants.CENTER);
 
         idText.addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {}
@@ -242,7 +242,20 @@ public class sGUI {
                         oldSaleDate.getText(),
                         oldSalePrice.getText()
                 };
-                DBHandler.update(Operations.updateArray(oldValues, newValues));
+                DBHandler.update(Operations.updateArrayFactory(oldValues, newValues));
+
+                idText.setText("");
+                descText.setText("");
+                cogsText.setText("");
+                DateMadeText.setDate(null);
+                saleDateText.setDate(null);
+                salePriceText.setText("");
+                oldID.setText("");
+                oldDesc.setText("");
+                oldCogs.setText("");
+                oldDateMade.setText("");
+                oldSaleDate.setText("");
+                oldSalePrice.setText("");
             }
         });
 

@@ -43,7 +43,7 @@ public class Operations {
         return dateFormat.format(date);
     }
 
-    public static String[] updateArray(String[] oldValues, String[] newValues){
+    public static String[] updateArrayFactory(String[] oldValues, String[] newValues){
         for (int i = 0; i < newValues.length; i++) {
             if(newValues[i] == null){
                 newValues[i] = oldValues[i];
