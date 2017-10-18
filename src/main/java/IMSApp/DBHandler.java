@@ -60,7 +60,7 @@ public class DBHandler {
         }
     }
 
-    public void soldRec(String[] items) {
+    public static void soldRec(String[] items) {
         //String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
         Connection c = connect();
         try{
@@ -76,7 +76,7 @@ public class DBHandler {
         catch(java.sql.SQLException e){
             e.printStackTrace();
         }
-    } //TODO updates for sold
+    }
 
     public static void update(String[] items) {
         Connection c = connect();
@@ -96,9 +96,16 @@ public class DBHandler {
         }
     }
 
-    public String[] searchDates(String from, String to){
+    public static ResultSet exportFromDates(String from, String to){
+        String q = "";
         Connection c = connect();
-        return null;
+        try {
+            Statement stmt = c.createStatement();
+            return stmt.executeQuery(q);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String[] searchID(String id){
@@ -119,6 +126,18 @@ public class DBHandler {
             System.out.println("Record not Found (DBHandler.searchID)");
         }
         return results;
+    }
+
+    public static ResultSet exportFromID(String id){
+        String q = "SELECT * FROM inventory WHERE ID ='"+id+"'";
+        Connection c = connect();
+        try {
+            Statement stmt = c.createStatement();
+            return stmt.executeQuery(q);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

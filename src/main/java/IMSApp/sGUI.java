@@ -129,7 +129,7 @@ public class sGUI {
         addComponent(addCard, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return addCard;
-    } // TODO COMPLETE
+    }
     private JPanel salesCard(){
         JPanel salesCard = new JPanel();
         salesCard.setLayout(new GridBagLayout());// TODO Box or Spring Layout
@@ -147,9 +147,11 @@ public class sGUI {
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
-
-            }
-        }); //Todo fill out action
+                DBHandler.soldRec(items);
+                idText.setText(null);
+                saleDateText.setDate(null);
+                salePriceText.setText(null);
+            }});
         back = new JButton("Back");
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
@@ -307,7 +309,7 @@ public class sGUI {
         final JLabel outputText = new JLabel(" ", SwingConstants.CENTER);
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
-        JLabel sold = new JLabel("Show sold items", SwingConstants.CENTER);
+        JLabel sold = new JLabel("Show items sold between these dates", SwingConstants.CENTER);
         final JCheckBox soldText = new JCheckBox();
         JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
         final JTextField productIDText = new JTextField();
@@ -315,8 +317,8 @@ public class sGUI {
         final JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
         final JDateChooser toDateChoose = new JDateChooser();
-        JLabel unsold = new JLabel("Show unsold items", SwingConstants.CENTER);
-        JCheckBox unsoldCheck = new JCheckBox();
+        JLabel unsold = new JLabel("Show items made between these dates", SwingConstants.CENTER);
+        final JCheckBox unsoldCheck = new JCheckBox();
 
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -325,14 +327,28 @@ public class sGUI {
         JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                outputText.setText("View as PDF");
+
             }
         }); //todo
 
         JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                outputText.setText("Export to Excel");
+                soldText.isSelected();
+                unsoldCheck.isSelected();
+                String id = productIDText.getText();
+                String toDate = Operations.scrubDate(toDateChoose.getDate());
+                String fromDate = Operations.scrubDate(fromDateChoose.getDate());
+
+                if ((id != null ||id.equals("")) && (toDate == null && fromDate == null)) {
+                    Operations.createExcel(DBHandler.exportFromID(id));
+                } else if ((id == null || id.equals("")) && (fromDate != null && toDate != null)) {
+                    Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate));
+                } else {
+                    outputText.setText("Can not search using both ID and Dates");
+                }
+
+
             }
         }); //todo
 
@@ -343,7 +359,8 @@ public class sGUI {
                 fromDateChoose.setDate(null);
                 toDateChoose.setDate(null);
             }
-        }); //todo
+        });
+
 
         JButton exportAll = new JButton("Export ALL Records to Excel");
         exportAll.addActionListener(new ActionListener() {
