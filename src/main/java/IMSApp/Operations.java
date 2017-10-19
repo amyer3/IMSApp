@@ -3,6 +3,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -87,20 +88,21 @@ public class Operations {
                 cell = row.createCell(1);
                 cell.setCellValue(rs.getString("ID"));
                 cell = row.createCell(2);
-                cell.setCellValue(rs.getString("Description"));
+                cell.setCellValue(rs.getString("Desc"));
                 cell = row.createCell(3);
                 cell.setCellValue(rs.getFloat("COGS"));
                 cell = row.createCell(4);
-                cell.setCellValue(rs.getDate("Date_Made"));
+                cell.setCellValue(scrubDate(rs.getDate("Date_Made")));
                 cell = row.createCell(5);
-                cell.setCellValue(rs.getDate("Sale_Date"));
+                cell.setCellValue(scrubDate(rs.getDate("Sale_Date")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            FileOutputStream out = new FileOutputStream(new File("Inventory as of "+todayDate()));
+            String userhome = System.getProperty("user.home")+"/Desktop";
+            FileOutputStream out = new FileOutputStream(new File(userhome,"Inv_on_"+todayDate()+".xls"));
             workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {
@@ -109,15 +111,9 @@ public class Operations {
             e.printStackTrace();
         }
 
-
     }
 
     public static void createPDF(ResultSet rs){}
-
-    public static Boolean arrayScrubber(String[] input){
-
-        return null;
-    } // TODO: 10/18/17 whats this do?
 
     public static String statusString(Boolean made, Boolean sold){
         if (made && !sold){
