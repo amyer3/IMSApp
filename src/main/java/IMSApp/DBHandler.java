@@ -96,8 +96,8 @@ public class DBHandler {
         }
     }
 
-    public static ResultSet exportFromDates(String from, String to){
-        String q = "";
+    public static ResultSet exportFromDates(String from, String to, String status){
+        String q = "SELECT * FROM inventory WHERE";
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();

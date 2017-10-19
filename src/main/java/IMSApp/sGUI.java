@@ -327,25 +327,25 @@ public class sGUI {
         JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
             }
         }); //todo
 
         JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                soldText.isSelected();
-                unsoldCheck.isSelected();
+                boolean sold = soldText.isSelected();
+                boolean made = unsoldCheck.isSelected();
                 String id = productIDText.getText();
                 String toDate = Operations.scrubDate(toDateChoose.getDate());
                 String fromDate = Operations.scrubDate(fromDateChoose.getDate());
-
-                if ((id != null ||id.equals("")) && (toDate == null && fromDate == null)) {
+                if ((!id.equals("")) && (toDate == null && fromDate == null)) {
+                    outputText.setText("id");
                     Operations.createExcel(DBHandler.exportFromID(id));
-                } else if ((id == null || id.equals("")) && (fromDate != null && toDate != null)) {
-                    Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate));
+                } else if ((fromDate != null && toDate != null)) {
+                    Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made, sold)));
+                    outputText.setText("dates");
                 } else {
-                    outputText.setText("Can not search using both ID and Dates");
+                    outputText.setText("Can not search using both ID and Dates or two dates needed");
                 }
 
 
