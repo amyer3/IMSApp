@@ -365,7 +365,6 @@ public class sGUI {
                 productIDText.setText("");
                 fromDateChoose.setDate(null);
                 toDateChoose.setDate(null);
-                outputText.setText("");
             }
         });
 
