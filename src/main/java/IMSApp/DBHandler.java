@@ -140,4 +140,17 @@ public class DBHandler {
         }
     }
 
+    public static ResultSet exportEverything(){
+        String q = "SELECT * FROM inventory";
+        Connection c = connect();
+        try {
+            Statement stmt = c.createStatement();
+            return stmt.executeQuery(q);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 }

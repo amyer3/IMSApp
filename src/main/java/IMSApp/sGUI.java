@@ -327,8 +327,21 @@ public class sGUI {
         JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                boolean sold = soldText.isSelected();
+                boolean made = unsoldCheck.isSelected();
+                String id = productIDText.getText();
+                String toDate = Operations.scrubDate(toDateChoose.getDate());
+                String fromDate = Operations.scrubDate(fromDateChoose.getDate());
+                if ((!id.equals("")) && (toDate == null && fromDate == null)) {
+                    Operations.createPDF(DBHandler.exportFromID(id));
+                } else if ((fromDate != null && toDate != null)) {
+                    Operations.createPDF(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made,
+                            sold)));
+                } else {
+                    outputText.setText("Can not search using both ID and Dates or two dates needed");
+                }
             }
-        }); //todo
+        });
 
         JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
@@ -339,18 +352,14 @@ public class sGUI {
                 String toDate = Operations.scrubDate(toDateChoose.getDate());
                 String fromDate = Operations.scrubDate(fromDateChoose.getDate());
                 if ((!id.equals("")) && (toDate == null && fromDate == null)) {
-                    outputText.setText("id");
                     Operations.createExcel(DBHandler.exportFromID(id));
                 } else if ((fromDate != null && toDate != null)) {
                     Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made, sold)));
-                    outputText.setText("dates");
                 } else {
                     outputText.setText("Can not search using both ID and Dates or two dates needed");
                 }
-
-
             }
-        }); //todo
+        });
 
         JButton searchAgain = new JButton("New Search");
         searchAgain.addActionListener(new ActionListener() {
@@ -358,6 +367,7 @@ public class sGUI {
                 productIDText.setText("");
                 fromDateChoose.setDate(null);
                 toDateChoose.setDate(null);
+                outputText.setText("");
             }
         });
 
@@ -365,9 +375,9 @@ public class sGUI {
         JButton exportAll = new JButton("Export ALL Records to Excel");
         exportAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                Operations.createExcel(DBHandler.exportEverything());
             }
-        }); // todo
+        });
 
         query.add(instructions);
         addComponent(query, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
