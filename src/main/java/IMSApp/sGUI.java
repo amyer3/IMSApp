@@ -100,12 +100,12 @@ public class sGUI {
                     };
                     if(Operations.blankChecker(values)){
                         DBHandler.addRec(values);
-                        outputText.setText("Record added to database!");
+                        infoBox("Record Added!", "Success!");
                     } else {
                         throw new NullPointerException();
                     }
                 }catch (NullPointerException ex){
-                    outputText.setText("Add failed: all fields are required (error: nullPointer)");
+                    infoBox("Add failed: all fields are required (error: nullPointer)", "Failure");
                 }finally {
                     idText.setText("");
                     descText.setText("");
@@ -126,14 +126,12 @@ public class sGUI {
 
         addComponent(addCard, addButton, 0, 4, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(addCard, back, 0, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(addCard, outputText, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return addCard;
     }
     private JPanel salesCard(){
         JPanel salesCard = new JPanel();
-        salesCard.setLayout(new GridBagLayout());// TODO Box or Spring Layout
-        final JLabel outputText = new JLabel();
+        salesCard.setLayout(new GridBagLayout());
 
         JLabel id = new JLabel("Product Id", SwingConstants.CENTER);
         JLabel saleDate = new JLabel("Date of Sale", SwingConstants.CENTER);
@@ -151,6 +149,7 @@ public class sGUI {
                 idText.setText(null);
                 saleDateText.setDate(null);
                 salePriceText.setText(null);
+                infoBox("Record Updated for Sale!", "Success!");
             }});
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -164,7 +163,6 @@ public class sGUI {
         addComponent(salesCard, salePriceText, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(salesCard, save, 0, 3, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(salesCard, back, 0, 4, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(salesCard, outputText, 0, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return salesCard;
     }
@@ -258,6 +256,7 @@ public class sGUI {
                 oldDateMade.setText("");
                 oldSaleDate.setText("");
                 oldSalePrice.setText("");
+                infoBox("Record Updated to new Values!", "Success!");
             }
         });
 
@@ -306,7 +305,6 @@ public class sGUI {
         final JPanel query = new JPanel();
         GridBagLayout bag = new GridBagLayout();
         query.setLayout(bag);
-        final JLabel outputText = new JLabel(" ", SwingConstants.CENTER);
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
         JLabel sold = new JLabel("Show items sold between these dates", SwingConstants.CENTER);
@@ -324,7 +322,7 @@ public class sGUI {
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
 
-        JButton PDF = new JButton("View as PDF"); // TODO: 10/23/17
+        JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean sold = soldText.isSelected();
@@ -338,7 +336,7 @@ public class sGUI {
                     Operations.createPDF(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made,
                             sold)));
                 } else {
-                    outputText.setText("Can not search using both ID and Dates or two dates needed");
+                    infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }
             }
         });
@@ -356,7 +354,7 @@ public class sGUI {
                 } else if ((fromDate != null && toDate != null)) {
                     Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made, sold)));
                 } else {
-                    outputText.setText("Can not search using both ID and Dates or two dates needed");
+                    infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }
             }
         });
@@ -406,7 +404,6 @@ public class sGUI {
         addComponent(query, exportAll, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, exportAllPDF, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, back, 0, 11, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, outputText, 0, 12, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return query;
     }
@@ -416,7 +413,7 @@ public class sGUI {
             CardLayout c1 = (CardLayout) superPanel.getLayout();
             c1.show(superPanel, e.getActionCommand());
         } // end method
-    } // end private class
+    }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
         Insets insets = new Insets(0,0, 0, 0);
@@ -425,4 +422,7 @@ public class sGUI {
         container.add(component, gbc);
     }
 
-}//end of class
+    private static void infoBox(String message, String title){
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
+    }
+}
