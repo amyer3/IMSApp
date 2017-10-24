@@ -324,7 +324,7 @@ public class sGUI {
         back.setActionCommand("home");
         back.addActionListener(new ButtonClickListener());
 
-        JButton PDF = new JButton("View as PDF");
+        JButton PDF = new JButton("View as PDF"); // TODO: 10/23/17
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean sold = soldText.isSelected();
@@ -379,6 +379,13 @@ public class sGUI {
             }
         });
 
+        JButton exportAllPDF = new JButton("Export ALL Records to PDF");
+        exportAll.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Operations.createPDF(DBHandler.exportEverything());
+            }
+        });
+
         query.add(instructions);
         addComponent(query, instructions, 0, 0, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
@@ -397,8 +404,9 @@ public class sGUI {
         addComponent(query, excel, 1, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, searchAgain, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, exportAll, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, back, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, outputText, 0, 11, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAllPDF, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, back, 0, 11, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, outputText, 0, 12, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return query;
     }

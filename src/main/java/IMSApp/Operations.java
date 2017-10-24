@@ -1,6 +1,8 @@
 package IMSApp;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -45,7 +47,7 @@ public class Operations {
         return checked;
     }
 
-    public static String scrubDate(Date date){
+    static String scrubDate(Date date){
         if (date != null) {
             return new SimpleDateFormat("yyyy-MM-dd").format(date);
         } else {
@@ -126,16 +128,36 @@ public class Operations {
     }
 
     public static void createPDF(ResultSet rs){
+        String spacer = "      |      ";
         String path = System.getProperty("user.home")+"/Desktop/Inv_on_"+Operations.todayDate()+".pdf";
         PDDocument doc = new PDDocument();
         PDPage inv = new PDPage();
         doc.addPage(inv);
 
-
         try {
+            PDPageContentStream contentStream = new PDPageContentStream(doc, inv);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(25, 725);
+            contentStream.showText("ID"+spacer+"Desc"+spacer+"COGS"+spacer+"Date Made"+spacer+"Sale "+
+                    "Date"+spacer+"Sale Price");
+            while(rs.next()){
+                contentStream.newLine();
+                contentStream.showText(
+                rs.getString("ID")+spacer+
+                rs.getString("Desc")+spacer+
+                rs.getFloat("COGS")+spacer+
+                Operations.scrubDate(rs.getDate("Date_Made"))+spacer+
+                Operations.scrubDate(rs.getDate("Sale_Date"))+spacer+
+                rs.getFloat("Sale_Price")
+                );
+            }
+            contentStream.endText();
+            contentStream.close();
             doc.save(path);
             doc.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
