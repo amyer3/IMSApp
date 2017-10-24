@@ -74,7 +74,7 @@ public class sGUI {
         addCard.setLayout(bagLayout);
 
         JLabel id = new JLabel("Product ID", SwingConstants.CENTER);
-        JLabel desc = new JLabel("Description", SwingConstants.CENTER);
+        JLabel desc = new JLabel("Description (255 Character MAX)", SwingConstants.CENTER);
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
         JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
         final JLabel outputText = new JLabel(" ", SwingConstants.CENTER);
@@ -380,7 +380,7 @@ public class sGUI {
         });
 
         JButton exportAllPDF = new JButton("Export ALL Records to PDF");
-        exportAll.addActionListener(new ActionListener() {
+        exportAllPDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Operations.createPDF(DBHandler.exportEverything());
             }

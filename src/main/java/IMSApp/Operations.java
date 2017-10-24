@@ -1,4 +1,5 @@
 package IMSApp;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -78,7 +79,7 @@ public class Operations {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet spreadsheet = workbook.createSheet("Inventory");
         // HEADERS
-        HSSFRow row = spreadsheet.createRow(1);
+        HSSFRow row = spreadsheet.createRow(0);
         HSSFCell cell;
         cell = row.createCell(0);
         cell.setCellValue("ID");
@@ -92,7 +93,7 @@ public class Operations {
         cell.setCellValue("Sale Date");
         cell = row.createCell(5);
         cell.setCellValue("Sale Price");
-        int i = 2;
+        int i = 1;
         // CELL CONTENT
         try {
             while(rs.next()){
@@ -109,6 +110,7 @@ public class Operations {
                 cell.setCellValue(Operations.scrubDate(rs.getDate("Sale_Date")));
                 cell = row.createCell(5);
                 cell.setCellValue(rs.getFloat("Sale_Price"));
+                i++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,6 +121,7 @@ public class Operations {
             FileOutputStream out = new FileOutputStream(new File(userhome,"Inv_on_"+Operations.todayDate()+".xls"));
             workbook.write(out);
             out.close();
+            Runtime.getRuntime().exec("open "+userhome+"Inv_on_"+Operations.todayDate()+".xls");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -128,7 +131,7 @@ public class Operations {
     }
 
     public static void createPDF(ResultSet rs){
-        String spacer = "      |      ";
+        String spacer = "           ";
         String path = System.getProperty("user.home")+"/Desktop/Inv_on_"+Operations.todayDate()+".pdf";
         PDDocument doc = new PDDocument();
         PDPage inv = new PDPage();
@@ -137,14 +140,20 @@ public class Operations {
         try {
             PDPageContentStream contentStream = new PDPageContentStream(doc, inv);
             contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
             contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 725);
-            contentStream.showText("ID"+spacer+"Desc"+spacer+"COGS"+spacer+"Date Made"+spacer+"Sale "+
+            contentStream.newLineAtOffset(15, 750);
+            contentStream.showText("Country Craftsman Inventory as of "+todayDate());
+            contentStream.newLine();
+            contentStream.newLine();
+            contentStream.showText("#"+spacer+"ID"+spacer+"Description"+spacer+"COGS"+spacer+"Date Made"+spacer+"Sale "+
                     "Date"+spacer+"Sale Price");
+            contentStream.newLine();
+            int i= 0;
             while(rs.next()){
                 contentStream.newLine();
                 contentStream.showText(
+                i+spacer+
                 rs.getString("ID")+spacer+
                 rs.getString("Desc")+spacer+
                 rs.getFloat("COGS")+spacer+
@@ -152,11 +161,14 @@ public class Operations {
                 Operations.scrubDate(rs.getDate("Sale_Date"))+spacer+
                 rs.getFloat("Sale_Price")
                 );
+                contentStream.newLine();
+                i++;
             }
             contentStream.endText();
             contentStream.close();
             doc.save(path);
             doc.close();
+            Runtime.getRuntime().exec("open "+path);
         } catch (Exception e) {
             e.printStackTrace();
         }
