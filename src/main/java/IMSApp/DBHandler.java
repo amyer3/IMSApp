@@ -2,21 +2,13 @@ package IMSApp;
 
 import java.sql.*;
 
-public class DBHandler {
-    static String DBloc = "jdbc:hsqldb:file:maindb";
+class DBHandler {
 
-    public static void Shutdown(){
-        try {
-            DriverManager.getConnection(DBloc+";shutdown=true");
-        } catch (java.sql.SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public static Connection connect(){
+    static Connection connect(){
         Connection maindbCon=null;
         try {
-            maindbCon = DriverManager.getConnection(DBloc+";shutdown=true");
+            String DBloc = "jdbc:hsqldb:file:maindb";
+            maindbCon = DriverManager.getConnection(DBloc +";shutdown=true");
         } catch (java.sql.SQLException e) {
             System.out.println("error initializing database");
             e.printStackTrace();
@@ -24,11 +16,9 @@ public class DBHandler {
         return maindbCon;
     }
 
-    public static void deleteRec(String id) {
-        Connection c = connect();
-    } //TODO delete a record
+    //static void deleteRec(String id) {} //TODO delete a record
 
-    public static void createFullDB(){
+    static void createFullDB(){
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();
@@ -47,11 +37,11 @@ public class DBHandler {
         }
     }
 
-    public static void addRec(String[] items) {
+    static void addRec(String[] items) {
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("INSERT INTO inventory (" +
+            stmt.executeQuery("INSERT INTO inventory (" +
                     "ID, Desc, COGS, Date_Made, Sold) VALUES " +
                     "('" + items[0] + "','" + items[1] + "','" + items[2] + "', '" + items[3] + "','false')");
             c.close();
@@ -60,30 +50,19 @@ public class DBHandler {
         }
     }
 
-    public static void soldRec(String[] items) {
+    static void soldRec(String[] items) throws java.sql.SQLException {
         //String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
         Connection c = connect();
-        try{
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("UPDATE inventory SET " +
-                    "Sale_Date = '" + items[1]+"' , "+
-                    "Sale_Price = '" + items[2]+"' "+
-                    "Sold = 'true' "+
-                    "WHERE ID = "+items[0]);
-
-            c.close();
-        }
-        catch(java.sql.SQLException e){
-            e.printStackTrace();
-        }
+        Statement stmt = c.createStatement();
+        stmt.executeQuery("UPDATE inventory SET " + "Sale_Date = '" + items[1] + "' , " + "Sale_Price = '" + items[2] + "WHERE ID = " + items[0]);
+        c.close();
     }
 
-    public static void update(String[] items) {
+    static void update(String[] items) {
         Connection c = connect();
         try{
             Statement stmt = c.createStatement();
-            //user lacks privilege or object not found: WHERE
-            ResultSet rs = stmt.executeQuery("UPDATE inventory SET " +
+            stmt.executeQuery("UPDATE inventory SET " +
                     "Desc = '" + items[1]+"' , "+
                     "COGS = '" + items[2]+"' , "+
                     "Date_Made = '" + items[3]+"' , "+
@@ -96,8 +75,8 @@ public class DBHandler {
         }
     }
 
-    public static ResultSet exportFromDates(String from, String to, String status){
-        String q = "SELECT * FROM inventory WHERE";
+    static ResultSet exportFromDates(String from, String to, String status){
+        String q = "SELECT * FROM inventory WHERE "+status+"BETWEEN #"+from+"# AND #"+to+"#";
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();
@@ -108,7 +87,7 @@ public class DBHandler {
         }
     }
 
-    public static String[] searchID(String id){
+    static String[] searchID(String id){
         Connection c = connect();
         String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
         String[] results = new String[7];
@@ -128,7 +107,7 @@ public class DBHandler {
         return results;
     }
 
-    public static ResultSet exportFromID(String id){
+    static ResultSet exportFromID(String id){
         String q = "SELECT * FROM inventory WHERE ID ='"+id+"'";
         Connection c = connect();
         try {
@@ -140,7 +119,7 @@ public class DBHandler {
         }
     }
 
-    public static ResultSet exportEverything(){
+    static ResultSet exportEverything(){
         String q = "SELECT * FROM inventory";
         Connection c = connect();
         try {

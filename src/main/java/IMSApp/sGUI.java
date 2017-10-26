@@ -8,18 +8,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 
 public class sGUI {
-    JFrame cards;
-    JButton back;
-    CardLayout cardPattern = new CardLayout();
-    JPanel superPanel;
+    private JButton back;
+    private CardLayout cardPattern = new CardLayout();
+    private JPanel superPanel;
 
     public static void main(String[] args) {
     }
 
-    public void doGui() {
-        cards = new JFrame();
+    void doGui() {
+        JFrame cards = new JFrame();
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
 
@@ -77,7 +77,6 @@ public class sGUI {
         JLabel desc = new JLabel("Description (255 Character MAX)", SwingConstants.CENTER);
         JLabel cogs = new JLabel("COGS", SwingConstants.CENTER);
         JLabel DateMade = new JLabel("Date Made", SwingConstants.CENTER);
-        final JLabel outputText = new JLabel(" ", SwingConstants.CENTER);
 
         final JTextField idText = new JTextField();
         final JTextField descText = new JTextField();
@@ -145,11 +144,15 @@ public class sGUI {
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
-                DBHandler.soldRec(items);
+                try {
+                    DBHandler.soldRec(items);
+                    infoBox("Record Updated for Sale!", "Success!");
+                } catch (SQLException e1) {
+                    infoBox("Item not found!", "Error!");
+                }
                 idText.setText(null);
                 saleDateText.setDate(null);
                 salePriceText.setText(null);
-                infoBox("Record Updated for Sale!", "Success!");
             }});
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -414,7 +417,8 @@ public class sGUI {
         } // end method
     }
 
-    private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+    private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth,
+                                     int gridheight, int anchor, int fill) {
         Insets insets = new Insets(0,0, 0, 0);
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
                 anchor, fill, insets, 0, 0);
