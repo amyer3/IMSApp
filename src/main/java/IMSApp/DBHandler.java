@@ -37,24 +37,20 @@ class DBHandler {
         }
     }
 
-    static void addRec(String[] items) {
-        Connection c = connect();
-        try {
-            Statement stmt = c.createStatement();
-            stmt.executeQuery("INSERT INTO inventory (" +
-                    "ID, Desc, COGS, Date_Made, Sold) VALUES " +
-                    "('" + items[0] + "','" + items[1] + "','" + items[2] + "', '" + items[3] + "','false')");
-            c.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void soldRec(String[] items) throws java.sql.SQLException {
-        //String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
+    static void addRec(String id, String desc, String cogs, String dateMade) throws SQLException {
         Connection c = connect();
         Statement stmt = c.createStatement();
-        stmt.executeQuery("UPDATE inventory SET " + "Sale_Date = '" + items[1] + "' , " + "Sale_Price = '" + items[2] + "WHERE ID = " + items[0]);
+        stmt.executeQuery("INSERT INTO inventory (" +
+                "ID, Desc, COGS, Date_Made) VALUES " +
+                "('" + id + "','" + desc + "','" + cogs + "', '" + dateMade + "')");
+        c.close();
+    }
+
+    static void soldRec(String id, String saleDate, String salePrice) throws java.sql.SQLException {
+        Connection c = connect();
+        Statement stmt = c.createStatement();
+        stmt.executeQuery("UPDATE inventory SET " + "Sale_Date = '" + saleDate + "' , " + "Sale_Price = '" + salePrice +
+                "WHERE ID = " + id);
         c.close();
     }
 
@@ -76,7 +72,7 @@ class DBHandler {
     }
 
     static ResultSet exportFromDates(String from, String to, String status){
-        String q = "SELECT * FROM inventory WHERE "+status+"BETWEEN #"+from+"# AND #"+to+"#";
+        String q = "SELECT * FROM inventory WHERE "+status+" BETWEEN '"+from+"' AND '"+to+"'";
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();

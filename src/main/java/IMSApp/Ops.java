@@ -19,15 +19,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class Operations {
+public class Ops {
 
     public static void main(String[] args) {
 
     }
 
-    public static void firstRun() {
+    static void firstRun() {
         File statusFile = new File("src/main/statusFileFolder/statusFile.txt");
-        if(!statusFile.exists()){
+        if (!statusFile.exists()) {
             try {
                 statusFile.createNewFile();
             } catch (IOException e) {
@@ -37,7 +37,7 @@ public class Operations {
         }
     }
 
-    public static Boolean blankChecker(String[] values){
+    public static Boolean blankChecker(String[] values) {
         Boolean checked = true;
         for (String value : values) {
             if (value == null) {
@@ -48,7 +48,7 @@ public class Operations {
         return checked;
     }
 
-    static String scrubDate(Date date){
+    static String scrubDate(Date date) {
         if (date != null) {
             return new SimpleDateFormat("yyyy-MM-dd").format(date);
         } else {
@@ -56,26 +56,16 @@ public class Operations {
         }
     }
 
-    public static String[] updateArrayFactory(String[] oldValues, String[] newValues){
+    static String[] updateArrayFactory(String[] oldValues, String[] newValues) {
         for (int i = 0; i < newValues.length; i++) {
-            if(newValues[i] == null){
+            if (newValues[i] == null) {
                 newValues[i] = oldValues[i];
             } // if statement
         } // for statement
         return newValues;
     }
 
-    public static String statusString(Boolean made, Boolean sold){
-        if (made && !sold){
-            return "IS FALSE";
-        } else if (!made && sold){
-            return "IS TRUE";
-        } else if (made && sold){
-            return "IS FALSE AND TRUE"; //todo sql t&f
-        } else return null;
-    }
-
-    public static void createExcel(ResultSet rs){
+    static void createExcel(ResultSet rs) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet spreadsheet = workbook.createSheet("Inventory");
         // HEADERS
@@ -96,7 +86,7 @@ public class Operations {
         int i = 1;
         // CELL CONTENT
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 row = spreadsheet.createRow(i);
                 cell = row.createCell(0);
                 cell.setCellValue(rs.getString("ID"));
@@ -105,9 +95,9 @@ public class Operations {
                 cell = row.createCell(2);
                 cell.setCellValue(rs.getFloat("COGS"));
                 cell = row.createCell(3);
-                cell.setCellValue(Operations.scrubDate(rs.getDate("Date_Made")));
+                cell.setCellValue(Ops.scrubDate(rs.getDate("Date_Made")));
                 cell = row.createCell(4);
-                cell.setCellValue(Operations.scrubDate(rs.getDate("Sale_Date")));
+                cell.setCellValue(Ops.scrubDate(rs.getDate("Sale_Date")));
                 cell = row.createCell(5);
                 cell.setCellValue(rs.getFloat("Sale_Price"));
                 i++;
@@ -117,11 +107,11 @@ public class Operations {
         }
 
         try {
-            String userhome = System.getProperty("user.home")+"/Desktop";
-            FileOutputStream out = new FileOutputStream(new File(userhome,"Inv_on_"+Operations.todayDate()+".xls"));
+            String userhome = System.getProperty("user.home") + "/Desktop";
+            FileOutputStream out = new FileOutputStream(new File(userhome, "Inv_on_" + Ops.todayDate() + ".xls"));
             workbook.write(out);
             out.close();
-            Runtime.getRuntime().exec("open "+userhome+"Inv_on_"+Operations.todayDate()+".xls");
+            Runtime.getRuntime().exec("open " + userhome + "Inv_on_" + Ops.todayDate() + ".xls");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -130,9 +120,9 @@ public class Operations {
 
     }
 
-    public static void createPDF(ResultSet rs){
+    static void createPDF(ResultSet rs) {
         String spacer = "           ";
-        String path = System.getProperty("user.home")+"/Desktop/Inv_on_"+Operations.todayDate()+".pdf";
+        String path = System.getProperty("user.home") + "/Desktop/Inv_on_" + Ops.todayDate() + ".pdf";
         PDDocument doc = new PDDocument();
         PDPage inv = new PDPage();
         doc.addPage(inv);
@@ -143,24 +133,15 @@ public class Operations {
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(15, 750);
-            contentStream.showText("Country Craftsman Inventory as of "+todayDate());
+            contentStream.showText("Country Craftsman Inventory as of " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
-            contentStream.showText("#"+spacer+"ID"+spacer+"Description"+spacer+"COGS"+spacer+"Date Made"+spacer+"Sale "+
-                    "Date"+spacer+"Sale Price");
+            contentStream.showText("#" + spacer + "ID" + spacer + "Description" + spacer + "COGS" + spacer + "Date Made" + spacer + "Sale " + "Date" + spacer + "Sale Price");
             contentStream.newLine();
-            int i= 0;
-            while(rs.next()){
+            int i = 0;
+            while (rs.next()) {
                 contentStream.newLine();
-                contentStream.showText(
-                i+spacer+
-                rs.getString("ID")+spacer+
-                rs.getString("Desc")+spacer+
-                rs.getFloat("COGS")+spacer+
-                Operations.scrubDate(rs.getDate("Date_Made"))+spacer+
-                Operations.scrubDate(rs.getDate("Sale_Date"))+spacer+
-                rs.getFloat("Sale_Price")
-                );
+                contentStream.showText(i + spacer + rs.getString("ID") + spacer + rs.getString("Desc") + spacer + rs.getFloat("COGS") + spacer + Ops.scrubDate(rs.getDate("Date_Made")) + spacer + Ops.scrubDate(rs.getDate("Sale_Date")) + spacer + rs.getFloat("Sale_Price"));
                 contentStream.newLine();
                 i++;
             }
@@ -168,7 +149,7 @@ public class Operations {
             contentStream.close();
             doc.save(path);
             doc.close();
-            Runtime.getRuntime().exec("open "+path);
+            Runtime.getRuntime().exec("open " + path);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,8 +157,15 @@ public class Operations {
 
     }
 
-    static String todayDate(){
+    static String todayDate() {
         return scrubDate(new Date());
     }
 
+    static String datePicker(String input) {
+        if (input.contains("made")) {
+            return "Date_Made";
+        } else {
+            return "Sale_Date";
+        }
+    }
 }

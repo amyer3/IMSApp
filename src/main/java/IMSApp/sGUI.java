@@ -91,19 +91,10 @@ public class sGUI {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
-                    String[] values = {
-                            idText.getText(),
-                            descText.getText(),
-                            cogsText.getText(),
-                            Operations.scrubDate(DateMadeText.getDate())
-                    };
-                    if(Operations.blankChecker(values)){
-                        DBHandler.addRec(values);
-                        infoBox("Record Added!", "Success!");
-                    } else {
-                        throw new NullPointerException();
-                    }
-                }catch (NullPointerException ex){
+                    DBHandler.addRec(idText.getText(), descText.getText(), cogsText.getText(), Ops.scrubDate(DateMadeText.getDate()));
+                    infoBox("Record Added!", "Success!");
+
+                }catch (Exception ex){
                     infoBox("Add failed: all fields are required (error: nullPointer)", "Failure");
                 }finally {
                     idText.setText("");
@@ -143,9 +134,8 @@ public class sGUI {
         JButton save = new JButton("Submit and Save");
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String[] items = {idText.getText(), saleDateText.getDate().toString(), salePriceText.getText()};
                 try {
-                    DBHandler.soldRec(items);
+                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), salePriceText.getText());
                     infoBox("Record Updated for Sale!", "Success!");
                 } catch (SQLException e1) {
                     infoBox("Item not found!", "Error!");
@@ -233,8 +223,8 @@ public class sGUI {
                         idText.getText(),
                         descText.getText(),
                         cogsText.getText(),
-                        Operations.scrubDate(DateMadeText.getDate()),
-                        Operations.scrubDate(saleDateText.getDate()),
+                        Ops.scrubDate(DateMadeText.getDate()),
+                        Ops.scrubDate(saleDateText.getDate()),
                         salePriceText.getText()
                 };
                 String[] oldValues = {
@@ -245,7 +235,7 @@ public class sGUI {
                         oldSaleDate.getText(),
                         oldSalePrice.getText()
                 };
-                DBHandler.update(Operations.updateArrayFactory(oldValues, newValues));
+                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues));
 
                 idText.setText("");
                 descText.setText("");
@@ -309,17 +299,16 @@ public class sGUI {
         GridBagLayout bag = new GridBagLayout();
         query.setLayout(bag);
 
+        String selection = "";
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
-        JLabel sold = new JLabel("Show items sold between these dates", SwingConstants.CENTER);
-        final JCheckBox soldText = new JCheckBox();
         JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
         final JTextField productIDText = new JTextField();
         JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
         final JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
         final JDateChooser toDateChoose = new JDateChooser();
-        JLabel unsold = new JLabel("Show items made between these dates", SwingConstants.CENTER);
-        final JCheckBox unsoldCheck = new JCheckBox();
+        String[] listOptions = {"Search by Date Made", "Search by Date Sold"};
+        final JComboBox picker = new JComboBox(listOptions);
 
         back = new JButton("Back");
         back.setActionCommand("home");
@@ -328,16 +317,13 @@ public class sGUI {
         JButton PDF = new JButton("View as PDF");
         PDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean sold = soldText.isSelected();
-                boolean made = unsoldCheck.isSelected();
                 String id = productIDText.getText();
-                String toDate = Operations.scrubDate(toDateChoose.getDate());
-                String fromDate = Operations.scrubDate(fromDateChoose.getDate());
+                String toDate = Ops.scrubDate(toDateChoose.getDate());
+                String fromDate = Ops.scrubDate(fromDateChoose.getDate());
                 if ((!id.equals("")) && (toDate == null && fromDate == null)) {
-                    Operations.createPDF(DBHandler.exportFromID(id));
+                    Ops.createPDF(DBHandler.exportFromID(id));
                 } else if ((fromDate != null && toDate != null)) {
-                    Operations.createPDF(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made,
-                            sold)));
+                    Ops.createPDF(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem().toString())));
                 } else {
                     infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }
@@ -347,15 +333,13 @@ public class sGUI {
         JButton excel = new JButton("Export to Excel");
         excel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean sold = soldText.isSelected();
-                boolean made = unsoldCheck.isSelected();
                 String id = productIDText.getText();
-                String toDate = Operations.scrubDate(toDateChoose.getDate());
-                String fromDate = Operations.scrubDate(fromDateChoose.getDate());
+                String toDate = Ops.scrubDate(toDateChoose.getDate());
+                String fromDate = Ops.scrubDate(fromDateChoose.getDate());
                 if ((!id.equals("")) && (toDate == null && fromDate == null)) {
-                    Operations.createExcel(DBHandler.exportFromID(id));
+                    Ops.createExcel(DBHandler.exportFromID(id));
                 } else if ((fromDate != null && toDate != null)) {
-                    Operations.createExcel(DBHandler.exportFromDates(fromDate, toDate, Operations.statusString(made, sold)));
+                    Ops.createExcel(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem().toString())));
                 } else {
                     infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }
@@ -375,14 +359,14 @@ public class sGUI {
         JButton exportAll = new JButton("Export ALL Records to Excel");
         exportAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Operations.createExcel(DBHandler.exportEverything());
+                Ops.createExcel(DBHandler.exportEverything());
             }
         });
 
         JButton exportAllPDF = new JButton("Export ALL Records to PDF");
         exportAllPDF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Operations.createPDF(DBHandler.exportEverything());
+                Ops.createPDF(DBHandler.exportEverything());
             }
         });
 
@@ -391,21 +375,18 @@ public class sGUI {
 
         addComponent(query, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, productIDText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, fromDate, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, fromDateChoose, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, toDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, toDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, sold, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, soldText, 1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, unsold, 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, unsoldCheck, 1, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, picker, 0, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, fromDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, fromDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, toDate, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, toDateChoose, 1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        addComponent(query, PDF, 0, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, excel, 1, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, searchAgain, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, exportAll, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, exportAllPDF, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, back, 0, 11, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, PDF, 0, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, excel, 1, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, searchAgain, 0, 7, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAll, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAllPDF, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, back, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return query;
     }
