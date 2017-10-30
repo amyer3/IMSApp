@@ -60,8 +60,8 @@ public class Ops {
         for (int i = 0; i < newValues.length; i++) {
             if (newValues[i] == null) {
                 newValues[i] = oldValues[i];
-            } // if statement
-        } // for statement
+            }
+        }
         return newValues;
     }
 
@@ -133,17 +133,15 @@ public class Ops {
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(15, 750);
-            contentStream.showText("Country Craftsman Inventory as of " + todayDate());
+            contentStream.showText("Country Craftsman Inventory on " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
-            contentStream.showText("#" + spacer + "ID" + spacer + "Description" + spacer + "COGS" + spacer + "Date Made" + spacer + "Sale " + "Date" + spacer + "Sale Price");
+            contentStream.showText("ID" + spacer + "Description" + spacer + "COGS" + spacer + "Date Made" + spacer + "Sale " + "Date" + spacer + "Sale Price");
             contentStream.newLine();
-            int i = 0;
             while (rs.next()) {
                 contentStream.newLine();
-                contentStream.showText(i + spacer + rs.getString("ID") + spacer + rs.getString("Desc") + spacer + rs.getFloat("COGS") + spacer + Ops.scrubDate(rs.getDate("Date_Made")) + spacer + Ops.scrubDate(rs.getDate("Sale_Date")) + spacer + rs.getFloat("Sale_Price"));
+                contentStream.showText(rs.getString("ID") + spacer + rs.getString("Desc") + spacer + rs.getFloat("COGS") + spacer + Ops.scrubDate(rs.getDate("Date_Made")) + spacer + Ops.scrubDate(rs.getDate("Sale_Date")) + spacer + rs.getFloat("Sale_Price"));
                 contentStream.newLine();
-                i++;
             }
             contentStream.endText();
             contentStream.close();
@@ -157,7 +155,7 @@ public class Ops {
 
     }
 
-    static String todayDate() {
+    private static String todayDate() {
         return scrubDate(new Date());
     }
 

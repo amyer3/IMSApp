@@ -4,7 +4,7 @@ import java.sql.*;
 
 class DBHandler {
 
-    static Connection connect(){
+    private static Connection connect(){
         Connection maindbCon=null;
         try {
             String DBloc = "jdbc:hsqldb:file:maindb";
@@ -54,7 +54,7 @@ class DBHandler {
         c.close();
     }
 
-    static void update(String[] items) {
+    static void update(String[] items) { // TODO: 10/29/17 user lacks privilege
         Connection c = connect();
         try{
             Statement stmt = c.createStatement();
@@ -65,7 +65,6 @@ class DBHandler {
                     "Sale_Date = '" + items[4]+"' , "+
                     "Sale_Price = '" + items[5]+"' "+
                     "WHERE ID = "+items[0]);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

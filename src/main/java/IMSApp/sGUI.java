@@ -10,7 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
-public class sGUI {
+class sGUI {
+
     private JButton back;
     private CardLayout cardPattern = new CardLayout();
     private JPanel superPanel;
@@ -235,7 +236,7 @@ public class sGUI {
                         oldSaleDate.getText(),
                         oldSalePrice.getText()
                 };
-                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues));
+                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues)); // todo user lacks privilege
 
                 idText.setText("");
                 descText.setText("");
@@ -299,10 +300,9 @@ public class sGUI {
         GridBagLayout bag = new GridBagLayout();
         query.setLayout(bag);
 
-        String selection = "";
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
         JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
-        final JTextField productIDText = new JTextField();
+        final JTextField productIDText = new JTextField("");
         JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
         final JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
@@ -375,7 +375,7 @@ public class sGUI {
 
         addComponent(query, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, productIDText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, picker, 0, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, picker, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, toDate, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
