@@ -16,7 +16,7 @@ class DBHandler {
         return maindbCon;
     }
 
-    //static void deleteRec(String id) {} //TODO delete a record
+    static void deleteRec(String id) {} //TODO delete a record
 
     static void createFullDB(){
         Connection c = connect();
@@ -53,10 +53,8 @@ class DBHandler {
         c.close();
     }
 
-    static void update(String[] items) { // TODO: 10/29/17 invalid datetime format
+    static void update(String[] items) {
         Connection c = connect();
-        System.out.println("sale price "+items[5]);
-        System.out.println("sale date "+items[4]);
         try{
             PreparedStatement stmt = c.prepareStatement("UPDATE inventory SET " +
                     "Desc = ?, COGS = ?, Date_Made = ?, Sale_Date = ?, Sale_Price = ? WHERE ID = ?");
@@ -68,7 +66,7 @@ class DBHandler {
             stmt.setString(5, items[5]);
             stmt.setString(6, items[0]);
 
-
+            stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,7 +84,7 @@ class DBHandler {
         }
     }
 
-    static String[] searchID(String id){
+    static String[] searchID(String id) {
         Connection c = connect();
         String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
         String[] results = new String[7];
@@ -94,14 +92,13 @@ class DBHandler {
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(q);
-            while (rs.next()){
-                for (int i = 0; i <  6; i++) {
+            while (rs.next()) {
+                for (int i = 0; i < 6; i++) {
                     results[i] = rs.getString(cols[i]);
-
                 }
             }
-        } catch (SQLException e) {
-            System.out.println("Record not Found (DBHandler.searchID)");
+        } catch (Exception e ){
+            e.printStackTrace();
         }
         return results;
     }

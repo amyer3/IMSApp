@@ -92,7 +92,9 @@ class sGUI {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
-                    DBHandler.addRec(idText.getText(), descText.getText(), cogsText.getText(), Ops.scrubDate(DateMadeText.getDate()));
+                    DBHandler.addRec(idText.getText(), descText.getText(), Ops.priceFormattter(cogsText.getText()),
+                            Ops.scrubDate
+                            (DateMadeText.getDate()));
                     infoBox("Record Added!", "Success!");
 
                 }catch (Exception ex){
@@ -136,7 +138,7 @@ class sGUI {
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), salePriceText.getText());
+                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), Ops.priceFormattter(salePriceText.getText()));
                     infoBox("Record Updated for Sale!", "Success!");
                 } catch (SQLException e1) {
                     infoBox("Item not found!", "Error!");
@@ -223,10 +225,10 @@ class sGUI {
                 String[] newValues = {
                         idText.getText(),
                         descText.getText(),
-                        cogsText.getText(),
+                        Ops.priceFormattter(cogsText.getText()),
                         Ops.scrubDate(DateMadeText.getDate()),
                         Ops.scrubDate(saleDateText.getDate()),
-                        salePriceText.getText()
+                        Ops.priceFormattter(salePriceText.getText())
                 };
 
                 String[] oldValues = {
@@ -238,7 +240,7 @@ class sGUI {
                         oldSalePrice.getText()
                 };
 
-                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues)); // todo invalid datetime fmt
+                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues));
 
                 idText.setText("");
                 descText.setText("");
@@ -259,9 +261,14 @@ class sGUI {
         JButton delete = new JButton("Delete this record");
         delete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                String id = idText.getText();
+                int dialogButton = JOptionPane.showConfirmDialog(null, "Delete record #"+id+"?", "Confirm delete",
+                        JOptionPane.YES_NO_OPTION);
+                if(dialogButton == JOptionPane.YES_OPTION){
+                    DBHandler.deleteRec(id);
+                }
             }
-        }); // Todo fill action listener
+        });
 
         addComponent(updateCard, field, 0,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(updateCard, newText, 1,0,1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);

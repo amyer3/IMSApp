@@ -18,8 +18,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-public class Ops {
+class Ops {
 
     public static void main(String[] args) {
 
@@ -64,7 +63,6 @@ public class Ops {
             }
             return newValues;
         }
-
 
     static void createExcel(ResultSet rs) {
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -165,6 +163,14 @@ public class Ops {
             return "Date_Made";
         } else {
             return "Sale_Date";
+        }
+    }
+
+    static String priceFormattter(String input){
+        if(!input.contains(".")){
+            return input.concat(".00");
+        } else {
+            return input;
         }
     }
 }
