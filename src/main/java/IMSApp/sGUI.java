@@ -262,10 +262,24 @@ class sGUI {
         delete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String id = idText.getText();
-                int dialogButton = JOptionPane.showConfirmDialog(null, "Delete record #"+id+"?", "Confirm delete",
+                int dialogButton = JOptionPane.showConfirmDialog(null, "Permanently delete record #"+id+"?",
+                        "Confirmation",
                         JOptionPane.YES_NO_OPTION);
                 if(dialogButton == JOptionPane.YES_OPTION){
                     DBHandler.deleteRec(id);
+                    idText.setText("");
+                    descText.setText("");
+                    cogsText.setText("");
+                    DateMadeText.setDate(null);
+                    saleDateText.setDate(null);
+                    salePriceText.setText("");
+                    oldID.setText("");
+                    oldDesc.setText("");
+                    oldCogs.setText("");
+                    oldDateMade.setText("");
+                    oldSaleDate.setText("");
+                    oldSalePrice.setText("");
+                    infoBox("Record #"+id+"deleted!", "Success");
                 }
             }
         });
