@@ -123,11 +123,9 @@ class DBHandler {
     }
 
     static ResultSet exportEverything(){
-        String q = "SELECT * FROM inventory";
-        Connection c = connect();
         try {
-            Statement stmt = c.createStatement();
-            return stmt.executeQuery(q);
+            Statement stmt = connect().createStatement();
+            return stmt.executeQuery("SELECT * FROM inventory");
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

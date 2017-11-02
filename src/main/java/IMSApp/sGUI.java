@@ -92,7 +92,7 @@ class sGUI {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
-                    DBHandler.addRec(idText.getText(), descText.getText(), Ops.priceFormattter(cogsText.getText()),
+                    DBHandler.addRec(idText.getText(), descText.getText(), Ops.priceFormatter(cogsText.getText()),
                             Ops.scrubDate
                             (DateMadeText.getDate()));
                     infoBox("Record Added!", "Success!");
@@ -138,7 +138,7 @@ class sGUI {
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), Ops.priceFormattter(salePriceText.getText()));
+                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), Ops.priceFormatter(salePriceText.getText()));
                     infoBox("Record Updated for Sale!", "Success!");
                 } catch (SQLException e1) {
                     infoBox("Item not found!", "Error!");
@@ -225,10 +225,10 @@ class sGUI {
                 String[] newValues = {
                         idText.getText(),
                         descText.getText(),
-                        Ops.priceFormattter(cogsText.getText()),
+                        Ops.priceFormatter(cogsText.getText()),
                         Ops.scrubDate(DateMadeText.getDate()),
                         Ops.scrubDate(saleDateText.getDate()),
-                        Ops.priceFormattter(salePriceText.getText())
+                        Ops.priceFormatter(salePriceText.getText())
                 };
 
                 String[] oldValues = {
@@ -360,9 +360,10 @@ class sGUI {
                 String toDate = Ops.scrubDate(toDateChoose.getDate());
                 String fromDate = Ops.scrubDate(fromDateChoose.getDate());
                 if ((!id.equals("")) && (toDate == null && fromDate == null)) {
-                    Ops.createExcel(DBHandler.exportFromID(id));
+                    Ops.createExcel(DBHandler.exportFromID(id), ;
                 } else if ((fromDate != null && toDate != null)) {
-                    Ops.createExcel(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem().toString())));
+                    Ops.createExcel(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem
+                            ().toString())));
                 } else {
                     infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }

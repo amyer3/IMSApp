@@ -10,11 +10,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -48,7 +46,7 @@ class Ops {
     }
 
     static String scrubDate(Date date) {
-        if (date != null){
+        if (date != null) {
             return new SimpleDateFormat("yyyy-MM-dd").format(date);
         } else {
             return null;
@@ -58,13 +56,14 @@ class Ops {
     static String[] updateArrayFactory(String[] oldValues, String[] newValues) {
         for (int i = 1; i < newValues.length; i++) {
             if (newValues[i] == null || newValues[i].equals("")) {
-                    newValues[i] = oldValues[i];
-                }
+                newValues[i] = oldValues[i];
             }
-            return newValues;
         }
+        return newValues;
+    }
 
     static void createExcel(ResultSet rs) {
+        String path = System.getProperty("user.home") + "/Desktop/Inv_" + Ops.todayDate() + ".xls";
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet spreadsheet = workbook.createSheet("Inventory");
         // HEADERS
@@ -92,31 +91,22 @@ class Ops {
                 cell = row.createCell(1);
                 cell.setCellValue(rs.getString("Desc"));
                 cell = row.createCell(2);
-                cell.setCellValue(rs.getFloat("COGS"));
+                cell.setCellValue(rs.getString("COGS"));
                 cell = row.createCell(3);
                 cell.setCellValue(Ops.scrubDate(rs.getDate("Date_Made")));
                 cell = row.createCell(4);
                 cell.setCellValue(Ops.scrubDate(rs.getDate("Sale_Date")));
                 cell = row.createCell(5);
-                cell.setCellValue(rs.getFloat("Sale_Price"));
+                cell.setCellValue(rs.getString("Sale_Price"));
                 i++;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            String userhome = System.getProperty("user.home") + "/Desktop";
-            FileOutputStream out = new FileOutputStream(new File(userhome, "Inv_on_" + Ops.todayDate() + ".xls"));
+            FileOutputStream out = new FileOutputStream(new File(path));
             workbook.write(out);
             out.close();
-            Runtime.getRuntime().exec("open " + userhome + "Inv_on_" + Ops.todayDate() + ".xls");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
+        openFile(path);
     }
 
     static void createPDF(ResultSet rs) {
@@ -166,11 +156,19 @@ class Ops {
         }
     }
 
-    static String priceFormattter(String input){
+    static String priceFormatter(String input){
         if(!input.contains(".")){
             return input.concat(".00");
         } else {
             return input;
+        }
+    }
+
+    static void openFile(String location){
+        try {
+            Runtime.getRuntime().exec("open "+location);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
