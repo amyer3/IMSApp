@@ -110,7 +110,6 @@ class Ops {
     }
 
     static void createPDF(ResultSet rs) {
-        String spacer = "           ";
         String path = System.getProperty("user.home") + "/Desktop/Inv_on_" + Ops.todayDate() + ".pdf";
         PDDocument doc = new PDDocument();
         PDPage inv = new PDPage();
@@ -125,11 +124,19 @@ class Ops {
             contentStream.showText("Country Craftsman Inventory on " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
-            contentStream.showText("ID" + spacer + "Description" + spacer + "COGS" + spacer + "Date Made" + spacer + "Sale " + "Date" + spacer + "Sale Price");
+            contentStream.showText(spacer("ID", 12)+spacer("Description", 260)+spacer("COGS", 10)+spacer("Date" +
+                    " Made", 15)+spacer("Sale Date", 15)+ spacer("Price", 10));
             contentStream.newLine();
             while (rs.next()) {
+                String id = rs.getString("ID");
+                String Desc = rs.getString("Desc");
+                String COGS = rs.getString("COGS");
+                String DM = Ops.scrubDate(rs.getDate("Date_Made"));
+                String SD = Ops.scrubDate(rs.getDate("Sale_Date"));
+                String SP = rs.getString("Sale_Price");
                 contentStream.newLine();
-                contentStream.showText(rs.getString("ID") + spacer + rs.getString("Desc") + spacer + rs.getFloat("COGS") + spacer + Ops.scrubDate(rs.getDate("Date_Made")) + spacer + Ops.scrubDate(rs.getDate("Sale_Date")) + spacer + rs.getFloat("Sale_Price"));
+                contentStream.showText(spacer(id, 12)+spacer(Desc, 260)+spacer(COGS, 10)+spacer(DM, 15)+spacer(SD,
+                        15) +spacer(SP, 10));
                 contentStream.newLine();
             }
             contentStream.endText();
@@ -170,5 +177,16 @@ class Ops {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static String spacer(String txt, int sChars){
+        StringBuilder ret = new StringBuilder().append(txt);
+            int len = txt.length();
+            System.out.println(txt + " " + len);
+            int goal = sChars - len;
+            for (int i = 0; i == goal; i++) {
+                ret.append(" ");
+            }
+        return ret.toString();
     }
 }
