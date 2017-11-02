@@ -360,10 +360,9 @@ class sGUI {
                 String toDate = Ops.scrubDate(toDateChoose.getDate());
                 String fromDate = Ops.scrubDate(fromDateChoose.getDate());
                 if ((!id.equals("")) && (toDate == null && fromDate == null)) {
-                    Ops.createExcel(DBHandler.exportFromID(id), ;
+                    Ops.createExcel(DBHandler.exportFromID(id)) ;
                 } else if ((fromDate != null && toDate != null)) {
-                    Ops.createExcel(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem
-                            ().toString())));
+                    Ops.createExcel(DBHandler.exportFromDates(fromDate, toDate, Ops.datePicker(picker.getSelectedItem().toString())));
                 } else {
                     infoBox("Can not search using both ID and Dates or two dates needed", "Error");
                 }
