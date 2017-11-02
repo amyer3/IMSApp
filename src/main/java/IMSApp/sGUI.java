@@ -185,7 +185,7 @@ class sGUI {
 
         /*
         the following JLabels should show in real time the information
-        retreived from searching in JTextField "idText"
+        retrieved from searching in JTextField "idText"
          */
 
         final JLabel oldID = new JLabel("", SwingConstants.CENTER);
@@ -204,12 +204,12 @@ class sGUI {
                 oldID.setText(idText.getText());
                 String values[] = DBHandler.searchID(idText.getText());
 
-                //String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date", "Sale_Price"};
+                //String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sale_Date", "Sale_Price"};
                 oldDesc.setText(values[1]);
                 oldCogs.setText(values[2]);
                 oldDateMade.setText(values[3]);
-                oldSaleDate.setText(values[5]);
-                oldSalePrice.setText(values[6]);
+                oldSaleDate.setText(values[4]);
+                oldSalePrice.setText(values[5]);
             }
         });
 
@@ -228,6 +228,7 @@ class sGUI {
                         Ops.scrubDate(saleDateText.getDate()),
                         salePriceText.getText()
                 };
+
                 String[] oldValues = {
                         oldID.getText(),
                         oldDesc.getText(),
@@ -236,7 +237,8 @@ class sGUI {
                         oldSaleDate.getText(),
                         oldSalePrice.getText()
                 };
-                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues)); // todo user lacks privilege
+
+                DBHandler.update(Ops.updateArrayFactory(oldValues, newValues)); // todo invalid datetime fmt
 
                 idText.setText("");
                 descText.setText("");

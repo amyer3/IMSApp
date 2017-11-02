@@ -5,7 +5,7 @@ public class Tester {
     public static void main(String[] args) {
         deleteDBRecords();
     }
-    public static void deleteDBRecords(){
+    private static void deleteDBRecords(){
         try {
             Files.deleteIfExists(Paths.get("/Users/Alex/IMSApp/maindb.log"));
             Files.deleteIfExists(Paths.get("/Users/Alex/IMSApp/maindb.properties"));

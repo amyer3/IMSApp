@@ -49,7 +49,7 @@ public class Ops {
     }
 
     static String scrubDate(Date date) {
-        if (date != null) {
+        if (date != null){
             return new SimpleDateFormat("yyyy-MM-dd").format(date);
         } else {
             return null;
@@ -57,13 +57,14 @@ public class Ops {
     }
 
     static String[] updateArrayFactory(String[] oldValues, String[] newValues) {
-        for (int i = 0; i < newValues.length; i++) {
-            if (newValues[i] == null) {
-                newValues[i] = oldValues[i];
+        for (int i = 1; i < newValues.length; i++) {
+            if (newValues[i] == null || newValues[i].equals("")) {
+                    newValues[i] = oldValues[i];
+                }
             }
+            return newValues;
         }
-        return newValues;
-    }
+
 
     static void createExcel(ResultSet rs) {
         HSSFWorkbook workbook = new HSSFWorkbook();

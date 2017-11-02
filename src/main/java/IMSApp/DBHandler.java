@@ -25,11 +25,10 @@ class DBHandler {
             stmt.executeUpdate("CREATE TABLE inventory(" +
                     "ID varchar(255) NOT NULL," +
                     "Desc varchar(255)," +
-                    "COGS float, " +
+                    "COGS varchar(12), " +
                     "Date_Made DATE, " +
                     "Sale_Date DATE, " +
-                    "Sale_Price float," +
-                    "Sold boolean)"
+                    "Sale_Price varchar(12))"
             );
             c.close();
         } catch (SQLException e) {
@@ -54,17 +53,22 @@ class DBHandler {
         c.close();
     }
 
-    static void update(String[] items) { // TODO: 10/29/17 user lacks privilege
+    static void update(String[] items) { // TODO: 10/29/17 invalid datetime format
         Connection c = connect();
+        System.out.println("sale price "+items[5]);
+        System.out.println("sale date "+items[4]);
         try{
-            Statement stmt = c.createStatement();
-            stmt.executeQuery("UPDATE inventory SET " +
-                    "Desc = '" + items[1]+"' , "+
-                    "COGS = '" + items[2]+"' , "+
-                    "Date_Made = '" + items[3]+"' , "+
-                    "Sale_Date = '" + items[4]+"' , "+
-                    "Sale_Price = '" + items[5]+"' "+
-                    "WHERE ID = "+items[0]);
+            PreparedStatement stmt = c.prepareStatement("UPDATE inventory SET " +
+                    "Desc = ?, COGS = ?, Date_Made = ?, Sale_Date = ?, Sale_Price = ? WHERE ID = ?");
+
+            stmt.setString(1, items[1]);
+            stmt.setString(2, items[2]);
+            stmt.setString(3, items[3]);
+            stmt.setString(4, items[4]);
+            stmt.setString(5, items[5]);
+            stmt.setString(6, items[0]);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,12 +90,12 @@ class DBHandler {
         Connection c = connect();
         String q = "SELECT * FROM inventory WHERE ID ='" + id +" '";
         String[] results = new String[7];
-        String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sold", "Sale_Date", "Sale_Price"};
+        String[] cols = {"ID", "Desc", "COGS", "Date_Made", "Sale_Date", "Sale_Price"};
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(q);
             while (rs.next()){
-                for (int i = 0; i <  7; i++) {
+                for (int i = 0; i <  6; i++) {
                     results[i] = rs.getString(cols[i]);
 
                 }
