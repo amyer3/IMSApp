@@ -16,7 +16,14 @@ class DBHandler {
         return maindbCon;
     }
 
-    static void deleteRec(String id) {} //TODO delete a record
+    static void deleteRec(String id) {
+        try {
+            PreparedStatement stmt = connect().prepareStatement("DELETE FROM inventory WHERE ID ="+id);
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     static void createFullDB(){
         Connection c = connect();
