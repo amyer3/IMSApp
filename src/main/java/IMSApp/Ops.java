@@ -9,9 +9,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,6 +30,8 @@ class Ops {
             }
             DBHandler.createFullDB();
         }
+        dateStamp(statusFile);
+        backupDatabase(statusFile);
     } // TODO: 11/2/17 every 24h backup to excel in different folder 
 
     public static Boolean blankChecker(String[] values) {
@@ -118,9 +118,9 @@ class Ops {
         try {
             PDPageContentStream contentStream = new PDPageContentStream(doc, inv);
             contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+            contentStream.setFont(PDType1Font.HELVETICA, 12);
             contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(15, 750);
+            contentStream.newLineAtOffset(10, 750);
             contentStream.showText("Country Craftsman Inventory on " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
@@ -179,16 +179,83 @@ class Ops {
         }
     }
 
-    static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  Broken Here
+    static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  formatting / wrapline / text limit
         if(txt == null){txt = "N/A";}
-        String space = " ";
-        StringBuilder ret = new StringBuilder();
-        ret.append(txt);
+        StringBuilder ret = new StringBuilder().append(txt);
         int len = txt.length();
         int goal = sChars - len;
         for (int i = 0; i < goal+1; i++) {
-            ret.append(space);
+            ret.append(" ");
         }
         return ret.toString();
+    }
+
+    static void backupDatabase(File file){
+        long now = System.currentTimeMillis();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            long then = Long.parseLong(br.readLine());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        backupExcel();
+    }
+
+    static void dateStamp(File file){
+        long date =System.currentTimeMillis();
+        try {
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+            writer.println(date);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void backupExcel(){
+        ResultSet rs = DBHandler.exportEverything();
+        String path = "src/main/Backup_Folder/Inventory_Backup_"+ Ops.todayDate()+ ".xls";
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet spreadsheet = workbook.createSheet("Inventory");
+        // HEADERS ~/IMSApp/src/main/Backup Folder
+        HSSFRow row = spreadsheet.createRow(0);
+        HSSFCell cell;
+        cell = row.createCell(0);
+        cell.setCellValue("ID");
+        cell = row.createCell(1);
+        cell.setCellValue("Description");
+        cell = row.createCell(2);
+        cell.setCellValue("COGS");
+        cell = row.createCell(3);
+        cell.setCellValue("Date Made");
+        cell = row.createCell(4);
+        cell.setCellValue("Sale Date");
+        cell = row.createCell(5);
+        cell.setCellValue("Sale Price");
+        int i = 1;
+        // CELL CONTENT
+        try {
+            while (rs.next()) {
+                row = spreadsheet.createRow(i);
+                cell = row.createCell(0);
+                cell.setCellValue(rs.getString("ID"));
+                cell = row.createCell(1);
+                cell.setCellValue(rs.getString("Desc"));
+                cell = row.createCell(2);
+                cell.setCellValue(rs.getString("COGS"));
+                cell = row.createCell(3);
+                cell.setCellValue(Ops.scrubDate(rs.getDate("Date_Made")));
+                cell = row.createCell(4);
+                cell.setCellValue(Ops.scrubDate(rs.getDate("Sale_Date")));
+                cell = row.createCell(5);
+                cell.setCellValue(rs.getString("Sale_Price"));
+                i++;
+            }
+            FileOutputStream out = new FileOutputStream(new File(path));
+            workbook.write(out);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
