@@ -111,7 +111,7 @@ class DBHandler {
     }
 
     static ResultSet exportFromID(String id){
-        String q = "SELECT * FROM inventory WHERE ID ='"+id+"'";
+        String q = "SELECT * FROM inventory WHERE ID LIKE '%"+id+"%'";
         Connection c = connect();
         try {
             Statement stmt = c.createStatement();
