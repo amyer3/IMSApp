@@ -32,7 +32,7 @@ class Ops {
             }
             DBHandler.createFullDB();
         }
-    }
+    } // TODO: 11/2/17 every 24h backup to excel in different folder 
 
     public static Boolean blankChecker(String[] values) {
         Boolean checked = true;
@@ -124,7 +124,7 @@ class Ops {
             contentStream.showText("Country Craftsman Inventory on " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
-            contentStream.showText(spacer("ID", 12)+spacer("Description", 260)+spacer("COGS", 10)+spacer("Date" +
+            contentStream.showText(spacer("ID", 12)+spacer("Description", 50)+spacer("COGS", 10)+spacer("Date" +
                     " Made", 15)+spacer("Sale Date", 15)+ spacer("Price", 10));
             contentStream.newLine();
             while (rs.next()) {
@@ -135,7 +135,7 @@ class Ops {
                 String SD = Ops.scrubDate(rs.getDate("Sale_Date"));
                 String SP = rs.getString("Sale_Price");
                 contentStream.newLine();
-                contentStream.showText(spacer(id, 12)+spacer(Desc, 260)+spacer(COGS, 10)+spacer(DM, 15)+spacer(SD,
+                contentStream.showText(spacer(id, 12)+spacer(Desc, 50)+spacer(COGS, 10)+spacer(DM, 15)+spacer(SD,
                         15) +spacer(SP, 10));
                 contentStream.newLine();
             }
@@ -179,14 +179,16 @@ class Ops {
         }
     }
 
-    static String spacer(String txt, int sChars){
-        StringBuilder ret = new StringBuilder().append(txt);
-            int len = txt.length();
-            System.out.println(txt + " " + len);
-            int goal = sChars - len;
-            for (int i = 0; i == goal; i++) {
-                ret.append(" ");
-            }
+    static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  Broken Here
+        if(txt == null){txt = "N/A";}
+        String space = " ";
+        StringBuilder ret = new StringBuilder();
+        ret.append(txt);
+        int len = txt.length();
+        int goal = sChars - len;
+        for (int i = 0; i < goal+1; i++) {
+            ret.append(space);
+        }
         return ret.toString();
     }
 }
