@@ -30,12 +30,12 @@ class DBHandler {
         try {
             Statement stmt = c.createStatement();
             stmt.executeUpdate("CREATE TABLE inventory(" +
-                    "ID varchar(255) NOT NULL," +
+                    "ID varchar(20) NOT NULL," +
                     "Desc varchar(255)," +
                     "COGS varchar(12), " +
                     "Date_Made DATE, " +
                     "Sale_Date DATE, " +
-                    "Sale_Price varchar(12))"
+                    "Sale_Price varchar(7))"
             );
             c.close();
         } catch (SQLException e) {
@@ -47,8 +47,8 @@ class DBHandler {
         Connection c = connect();
         Statement stmt = c.createStatement();
         stmt.executeQuery("INSERT INTO inventory (" +
-                "ID, Desc, COGS, Date_Made) VALUES " +
-                "('" + id + "','" + desc + "','" + cogs + "', '" + dateMade + "')");
+                "ID, Desc, COGS, Date_Made, Sale_Date) VALUES " +
+                "('" + id + "','" + desc + "','" + cogs + "','" + dateMade + "', null)");
         c.close();
     }
 
@@ -80,6 +80,7 @@ class DBHandler {
     }
 
     static ResultSet exportFromDates(String from, String to, String status){
+
         String q = "SELECT * FROM inventory WHERE "+status+" BETWEEN '"+from+"' AND '"+to+"'";
         Connection c = connect();
         try {
@@ -131,6 +132,16 @@ class DBHandler {
             return null;
         }
 
+    }
+
+    static ResultSet unsold(){
+        try {
+            Statement stmt = connect().createStatement();
+            return stmt.executeQuery("SELECT * FROM inventory WHERE Sale_Date IS null");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

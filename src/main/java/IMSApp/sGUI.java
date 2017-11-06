@@ -324,13 +324,15 @@ class sGUI {
         query.setLayout(bag);
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
-        JLabel pID = new JLabel("Product ID", SwingConstants.CENTER);
+        JLabel pID = new JLabel("Search by partial or full ID", SwingConstants.CENTER);
+        JLabel show = new JLabel("Show all ");
+        JLabel showPtTwo = new JLabel(" between these dates:");
         final JTextField productIDText = new JTextField("");
-        JLabel fromDate = new JLabel("From Date", SwingConstants.CENTER);
+        JLabel fromDate = new JLabel("From", SwingConstants.CENTER);
         final JDateChooser fromDateChoose = new JDateChooser();
-        JLabel toDate = new JLabel("To Date", SwingConstants.CENTER);
+        JLabel toDate = new JLabel("To", SwingConstants.CENTER);
         final JDateChooser toDateChoose = new JDateChooser();
-        String[] listOptions = {"Search by Date Made", "Search by Date Sold"};
+        String[] listOptions = {"made", "sold"};
         final JComboBox picker = new JComboBox(listOptions);
 
         back = new JButton("Back");
@@ -378,6 +380,20 @@ class sGUI {
             }
         });
 
+        JButton showAllUnsoldPDF = new JButton("View unsold items as a PDF");
+        showAllUnsoldPDF.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Ops.createPDF(DBHandler.unsold());
+            }
+        });
+
+        JButton showAllUnsoldExcel = new JButton("View unsold items in Excel");
+        showAllUnsoldExcel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Ops.createExcel(DBHandler.unsold());
+            }
+        });
+
 
         JButton exportAll = new JButton("Export ALL Records to Excel");
         exportAll.addActionListener(new ActionListener() {
@@ -406,10 +422,12 @@ class sGUI {
 
         addComponent(query, PDF, 0, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, excel, 1, 6, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, searchAgain, 0, 7, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, exportAll, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, exportAllPDF, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, back, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, showAllUnsoldPDF, 0, 7, 1,1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, showAllUnsoldExcel, 1, 7, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, searchAgain, 0, 8, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAll, 0, 9, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, exportAllPDF, 0, 10, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, back, 0, 11, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return query;
     }

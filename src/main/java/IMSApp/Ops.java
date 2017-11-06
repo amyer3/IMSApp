@@ -32,7 +32,7 @@ class Ops {
         }
         dateStamp(statusFile);
         backupDatabase(statusFile);
-    } // TODO: 11/2/17 every 24h backup to excel in different folder 
+    }
 
     public static Boolean blankChecker(String[] values) {
         Boolean checked = true;
@@ -100,6 +100,9 @@ class Ops {
                 cell.setCellValue(rs.getString("Sale_Price"));
                 i++;
             }
+            for (int j = 0; j <5 ; j++) {
+                spreadsheet.autoSizeColumn(j);
+            }
             FileOutputStream out = new FileOutputStream(new File(path));
             workbook.write(out);
             out.close();
@@ -121,11 +124,11 @@ class Ops {
             contentStream.setFont(PDType1Font.HELVETICA, 12);
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(10, 750);
-            contentStream.showText("Country Craftsman Inventory on " + todayDate());
+            contentStream.showText("Country Craftsman Inventory - " + todayDate());
             contentStream.newLine();
             contentStream.newLine();
             contentStream.showText(spacer("ID", 12)+spacer("Description", 50)+spacer("COGS", 10)+spacer("Date" +
-                    " Made", 15)+spacer("Sale Date", 15)+ spacer("Price", 10));
+                    " Made", 11)+spacer("Sale Date", 11)+ spacer("Sale Price", 0));
             contentStream.newLine();
             while (rs.next()) {
                 String id = rs.getString("ID");
@@ -135,8 +138,8 @@ class Ops {
                 String SD = Ops.scrubDate(rs.getDate("Sale_Date"));
                 String SP = rs.getString("Sale_Price");
                 contentStream.newLine();
-                contentStream.showText(spacer(id, 12)+spacer(Desc, 50)+spacer(COGS, 10)+spacer(DM, 15)+spacer(SD,
-                        15) +spacer(SP, 10));
+                contentStream.showText(spacer(id, 12)+spacer(Desc, 50)+"\\n"+spacer(COGS, 10)+spacer(DM, 11)+spacer
+                        (SD, 11) +spacer(SP, 0));
                 contentStream.newLine();
             }
             contentStream.endText();
@@ -182,23 +185,24 @@ class Ops {
     static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  formatting / wrapline / text limit
         if(txt == null){txt = "N/A";}
         StringBuilder ret = new StringBuilder().append(txt);
-        int len = txt.length();
-        int goal = sChars - len;
-        for (int i = 0; i < goal+1; i++) {
+        for (int i = sChars; i > txt.length() ; i--) {
             ret.append(" ");
         }
         return ret.toString();
     }
 
     static void backupDatabase(File file){
+        long then = 0;
         long now = System.currentTimeMillis();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
-            long then = Long.parseLong(br.readLine());
+            then = Long.parseLong(br.readLine());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        backupExcel();
+        if(now - then > 86400000){
+            backupExcel();
+        }
     }
 
     static void dateStamp(File file){
