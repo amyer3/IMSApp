@@ -20,6 +20,11 @@ class sGUI {
     }
 
     void doGui() {
+        UIManager.put("Button.font", new Font("Arial", Font.PLAIN, 20));
+        UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 20));
+        UIManager.put("OptionPane.font", new Font("Arial", Font.PLAIN, 20));
+        UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, 20));
+        UIManager.put("ComboBox.font", new Font("Arial", Font.PLAIN, 20));
         JFrame cards = new JFrame();
         cards.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         superPanel = new JPanel(new CardLayout());
@@ -325,14 +330,13 @@ class sGUI {
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
         JLabel pID = new JLabel("Search by partial or full ID", SwingConstants.CENTER);
-        JLabel show = new JLabel("Show all ");
-        JLabel showPtTwo = new JLabel(" between these dates:");
+        JLabel show = new JLabel("Search by: ");
         final JTextField productIDText = new JTextField("");
         JLabel fromDate = new JLabel("From", SwingConstants.CENTER);
         final JDateChooser fromDateChoose = new JDateChooser();
         JLabel toDate = new JLabel("To", SwingConstants.CENTER);
         final JDateChooser toDateChoose = new JDateChooser();
-        String[] listOptions = {"made", "sold"};
+        String[] listOptions = {"Date made", "Date sold"};
         final JComboBox picker = new JComboBox(listOptions);
 
         back = new JButton("Back");
@@ -414,6 +418,7 @@ class sGUI {
 
         addComponent(query, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, productIDText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, show, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, picker, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);

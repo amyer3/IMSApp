@@ -30,19 +30,7 @@ class Ops {
             }
             DBHandler.createFullDB();
         }
-        dateStamp(statusFile);
-        backupDatabase(statusFile);
-    }
-
-    public static Boolean blankChecker(String[] values) {
-        Boolean checked = true;
-        for (String value : values) {
-            if (value == null) {
-                checked = false;
-                break;
-            }
-        }
-        return checked;
+        backupExcel();
     }
 
     static String scrubDate(Date date) {
@@ -174,7 +162,7 @@ class Ops {
         }
     }
 
-    static void openFile(String location){
+    private static void openFile(String location){
         try {
             Runtime.getRuntime().exec("open "+location);
         } catch (Exception e) {
@@ -182,7 +170,7 @@ class Ops {
         }
     }
 
-    static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  formatting / wrapline / text limit
+    private static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  formatting / wrapline / text limit
         if(txt == null){txt = "N/A";}
         StringBuilder ret = new StringBuilder().append(txt);
         for (int i = sChars; i > txt.length() ; i--) {
@@ -191,32 +179,7 @@ class Ops {
         return ret.toString();
     }
 
-    static void backupDatabase(File file){
-        long then = 0;
-        long now = System.currentTimeMillis();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            then = Long.parseLong(br.readLine());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(now - then > 86400000){
-            backupExcel();
-        }
-    }
-
-    static void dateStamp(File file){
-        long date =System.currentTimeMillis();
-        try {
-            PrintWriter writer = new PrintWriter(file, "UTF-8");
-            writer.println(date);
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void backupExcel(){
+    private static void backupExcel(){
         ResultSet rs = DBHandler.exportEverything();
         String path = "src/main/Backup_Folder/Inventory_Backup_"+ Ops.todayDate()+ ".xls";
         HSSFWorkbook workbook = new HSSFWorkbook();
