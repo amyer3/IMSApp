@@ -143,10 +143,12 @@ class sGUI {
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    DBHandler.soldRec(idText.getText(), saleDateText.getDate().toString(), Ops.priceFormatter(salePriceText.getText()));
+                    DBHandler.soldRec(idText.getText(), Ops.scrubDate(saleDateText.getDate()), Ops.priceFormatter
+                            (salePriceText.getText()));
                     infoBox("Record Updated for Sale!", "Success!");
                 } catch (SQLException e1) {
                     infoBox("Item not found!", "Error!");
+                    e1.printStackTrace();
                 }
                 idText.setText(null);
                 saleDateText.setDate(null);

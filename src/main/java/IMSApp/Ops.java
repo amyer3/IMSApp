@@ -183,18 +183,9 @@ class Ops {
         }
     }
 
-    private static String spacer(String txt, int sChars){
-        if(txt == null){txt = "N/A";}
-        StringBuilder ret = new StringBuilder().append(txt);
-        for (int i = sChars; i > txt.length() ; i--) {
-            ret.append(" ");
-        }
-        return ret.toString();
-    }
-
     private static void backupExcel(){
         ResultSet rs = DBHandler.exportEverything();
-        String path = "src/main/Backup_Folder/Inventory_Backup_"+ Ops.todayDate()+ ".xls";
+        String path = "src/main/Backup_Folder/Inventory_Backup.xls";
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet spreadsheet = workbook.createSheet("Inventory");
         // HEADERS ~/IMSApp/src/main/Backup Folder

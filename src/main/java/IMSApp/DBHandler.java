@@ -45,18 +45,23 @@ class DBHandler {
 
     static void addRec(String id, String desc, String cogs, String dateMade) throws SQLException {
         Connection c = connect();
-        Statement stmt = c.createStatement();
-        stmt.executeQuery("INSERT INTO inventory (" +
-                "ID, Desc, COGS, Date_Made, Sale_Date) VALUES " +
-                "('" + id + "','" + desc + "','" + cogs + "','" + dateMade + "', null)");
+        PreparedStatement stmt = c.prepareStatement("INSERT INTO inventory (ID, Desc, COGS, Date_Made, Sale_Date) " +
+                "VALUES (?,?,?,?, null)");
+        stmt.setString(1, id);
+        stmt.setString(2, desc);
+        stmt.setString(3, cogs);
+        stmt.setString(4, dateMade);
+        stmt.execute();
         c.close();
     }
 
     static void soldRec(String id, String saleDate, String salePrice) throws java.sql.SQLException {
         Connection c = connect();
-        Statement stmt = c.createStatement();
-        stmt.executeQuery("UPDATE inventory SET Sale_Date = '" + saleDate + "' , " + "Sale_Price = '" + salePrice +
-                "WHERE ID = " + id);
+        PreparedStatement stmt = c.prepareStatement("UPDATE inventory SET Sale_Date = ?, Sale_Price = ? WHERE ID = ?");
+        stmt.setString(1, saleDate);
+        stmt.setString(2, salePrice);
+        stmt.setString(3, id);
+        stmt.execute();
         c.close();
     }
 
@@ -65,14 +70,12 @@ class DBHandler {
         try{
             PreparedStatement stmt = c.prepareStatement("UPDATE inventory SET " +
                     "Desc = ?, COGS = ?, Date_Made = ?, Sale_Date = ?, Sale_Price = ? WHERE ID = ?");
-
             stmt.setString(1, items[1]);
             stmt.setString(2, items[2]);
             stmt.setString(3, items[3]);
             stmt.setString(4, items[4]);
             stmt.setString(5, items[5]);
             stmt.setString(6, items[0]);
-
             stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
