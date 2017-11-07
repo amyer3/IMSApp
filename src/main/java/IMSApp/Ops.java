@@ -1,15 +1,19 @@
 package IMSApp;
 
+import be.quodlibet.boxable.BaseTable;
+import be.quodlibet.boxable.HorizontalAlignment;
+import be.quodlibet.boxable.Row;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,45 +105,52 @@ class Ops {
     }
 
     static void createPDF(ResultSet rs) {
-        String path = System.getProperty("user.home") + "/Desktop/Inv_on_" + Ops.todayDate() + ".pdf";
+        String path = System.getProperty("user.home") + "/Desktop/Inv_on_"+todayDate()+".pdf";
         PDDocument doc = new PDDocument();
-        PDPage inv = new PDPage();
-        doc.addPage(inv);
+        PDPage page = new PDPage();
+        float margin = 15;
+        float yStart = page.getMediaBox().getHeight() - (2* margin);
+        float tableWidth = page.getMediaBox().getWidth() - (2*margin);
+        float bottomMargin = 20;
 
         try {
-            PDPageContentStream contentStream = new PDPageContentStream(doc, inv);
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(10, 750);
-            contentStream.showText("Country Craftsman Inventory - " + todayDate());
-            contentStream.newLine();
-            contentStream.newLine();
-            contentStream.showText(spacer("ID", 12)+spacer("Description", 50)+spacer("COGS", 10)+spacer("Date" +
-                    " Made", 11)+spacer("Sale Date", 11)+ spacer("Sale Price", 0));
-            contentStream.newLine();
+            PDPageContentStream cs = new PDPageContentStream(doc, page);
+            BaseTable table = new BaseTable(yStart, yStart, bottomMargin, tableWidth, margin, doc, page, true,
+                    true);
+            Row<PDPage> headerRow = table.createRow(15f);
+            headerRow.createCell(10, "Product ID").setAlign(HorizontalAlignment.CENTER);
+            headerRow.createCell(50, "Description").setAlign(HorizontalAlignment.CENTER);
+            headerRow.createCell(10, "Cost").setAlign(HorizontalAlignment.CENTER);
+            headerRow.createCell(10, "Date Made").setAlign(HorizontalAlignment.CENTER);
+            headerRow.createCell(10, "Date Sold").setAlign(HorizontalAlignment.CENTER);
+            headerRow.createCell(10, "Sale Price").setAlign(HorizontalAlignment.CENTER);
+            table.addHeaderRow(headerRow);
+
             while (rs.next()) {
                 String id = rs.getString("ID");
-                String Desc = rs.getString("Desc");
-                String COGS = rs.getString("COGS");
+                String desc = rs.getString("Desc");
+                String cogs = Ops.priceFormatter(rs.getString("COGS"));
                 String DM = Ops.scrubDate(rs.getDate("Date_Made"));
                 String SD = Ops.scrubDate(rs.getDate("Sale_Date"));
-                String SP = rs.getString("Sale_Price");
-                contentStream.newLine();
-                contentStream.showText(spacer(id, 12)+spacer(Desc, 50)+"\\n"+spacer(COGS, 10)+spacer(DM, 11)+spacer
-                        (SD, 11) +spacer(SP, 0));
-                contentStream.newLine();
+                String SP = Ops.priceFormatter(rs.getString("Sale_Price"));
+                Row<PDPage> row = table.createRow(10f);
+                row.createCell(10, id);
+                row.createCell(50, desc);
+                row.createCell(10, cogs).setAlign(HorizontalAlignment.CENTER);
+                row.createCell(10, DM).setAlign(HorizontalAlignment.CENTER);
+                row.createCell(10, SD).setAlign(HorizontalAlignment.CENTER);
+                row.createCell(10, SP).setAlign(HorizontalAlignment.CENTER);
             }
-            contentStream.endText();
-            contentStream.close();
+            doc.addPage(page);
+            table.draw();
+            cs.close();
+
             doc.save(path);
             doc.close();
             Runtime.getRuntime().exec("open " + path);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private static String todayDate() {
@@ -155,11 +166,13 @@ class Ops {
     }
 
     static String priceFormatter(String input){
-        if(!input.contains(".")){
-            return input.concat(".00");
-        } else {
-            return input;
-        }
+        if(input !=null){
+            if(!input.contains(".")){
+                return input.concat(".00");
+            } else {
+                return input;
+            }
+        } else {return null;}
     }
 
     private static void openFile(String location){
@@ -170,7 +183,7 @@ class Ops {
         }
     }
 
-    private static String spacer(String txt, int sChars){// TODO: 11/2/17 2017-11-02  formatting / wrapline / text limit
+    private static String spacer(String txt, int sChars){
         if(txt == null){txt = "N/A";}
         StringBuilder ret = new StringBuilder().append(txt);
         for (int i = sChars; i > txt.length() ; i--) {

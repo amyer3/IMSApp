@@ -330,7 +330,7 @@ class sGUI {
 
         JLabel instructions = new JLabel("Search individually by ID, or by date range", SwingConstants.CENTER);
         JLabel pID = new JLabel("Search by partial or full ID", SwingConstants.CENTER);
-        JLabel show = new JLabel("Search by: ");
+        JLabel show = new JLabel("Search by: ", SwingConstants.CENTER);
         final JTextField productIDText = new JTextField("");
         JLabel fromDate = new JLabel("From", SwingConstants.CENTER);
         final JDateChooser fromDateChoose = new JDateChooser();
@@ -418,7 +418,7 @@ class sGUI {
 
         addComponent(query, pID, 0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, productIDText, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(query, show, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(query, show, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, picker, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDate, 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(query, fromDateChoose, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);

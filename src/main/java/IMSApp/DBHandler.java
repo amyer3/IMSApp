@@ -55,7 +55,7 @@ class DBHandler {
     static void soldRec(String id, String saleDate, String salePrice) throws java.sql.SQLException {
         Connection c = connect();
         Statement stmt = c.createStatement();
-        stmt.executeQuery("UPDATE inventory SET " + "Sale_Date = '" + saleDate + "' , " + "Sale_Price = '" + salePrice +
+        stmt.executeQuery("UPDATE inventory SET Sale_Date = '" + saleDate + "' , " + "Sale_Price = '" + salePrice +
                 "WHERE ID = " + id);
         c.close();
     }
