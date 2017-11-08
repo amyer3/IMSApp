@@ -25,10 +25,11 @@ class Ops {
     }
 
     static void firstRun() {
-        File statusFile = new File("src/main/statusFileFolder/statusFile.txt");
+        String path = System.getProperty("user.home") + "/Desktop/Inventory_Backup/";
+        File statusFile = new File(path);
         if (!statusFile.exists()) {
             try {
-                statusFile.createNewFile();
+                Runtime.getRuntime().exec("mkdir "+path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -185,7 +186,7 @@ class Ops {
 
     private static void backupExcel(){
         ResultSet rs = DBHandler.exportEverything();
-        String path = "src/main/Backup_Folder/Inventory_Backup.xls";
+        String path = System.getProperty("user.home") + "/Desktop/Inventory_Backup/Inventory_Backup.xls";
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet spreadsheet = workbook.createSheet("Inventory");
         // HEADERS ~/IMSApp/src/main/Backup Folder
